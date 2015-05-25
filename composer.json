@@ -1,0 +1,38 @@
+{
+    "name": "florianv/business",
+    "type": "library",
+    "description": "DateTime calculations in business hours",
+    "keywords": [
+        "business",
+        "hour",
+        "date",
+        "time",
+        "schedule"
+    ],
+    "homepage": "https://github.com/florianv/business",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Florian Voutzinos",
+            "email": "florian@voutzinos.com",
+            "homepage": "http://florian.voutzinos.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^4.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Business\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Business\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

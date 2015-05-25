@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - nightly
+  - hhvm
+
+before_script:
+  - composer selfupdate
+  - composer --prefer-source --dev install
+
+script:
+  - bin/phpunit
