@@ -17,7 +17,7 @@ class TimeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid time "foo"
+     * @expectedExceptionMessage Invalid time "foo".
      */
     public function testFromStringInvalid()
     {
@@ -61,5 +61,11 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($time->isBeforeOrEqual(new Time('22', '00')));
         $this->assertFalse($time->isBeforeOrEqual(new Time('18', '15')));
         $this->assertTrue($time->isBeforeOrEqual(new Time('20', '00')));
+    }
+
+    public function testToString()
+    {
+        $time = new Time('20', '30');
+        $this->assertEquals('20:30', $time->toString());
     }
 }

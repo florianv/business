@@ -60,7 +60,7 @@ final class Business implements BusinessInterface
         $tmpDate->setTimezone($this->timezone);
 
         if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay((int) $tmpDate->format('N'))) {
-            return $day->isTimeWithin(Time::fromDate($tmpDate));
+            return $day->isTimeWithinOpeningHours(Time::fromDate($tmpDate));
         }
 
         return false;
@@ -182,7 +182,6 @@ final class Business implements BusinessInterface
             $tmpDate = $this->getDateAfter($tmpDate);
         }
 
-        // We set the time to the opening time of this day
         $closestDay = $this->getClosestDayBefore((int) $tmpDate->format('N'));
         $closingTime = $closestDay->getOpeningTime();
         $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes());
@@ -288,6 +287,13 @@ final class Business implements BusinessInterface
         return $this->getDay($dayNumber);
     }
 
+    /**
+     * Gets the day corresponding to the day number.
+     *
+     * @param integer $dayNumber
+     *
+     * @return Day|null
+     */
     private function getDay($dayNumber)
     {
         return isset($this->days[$dayNumber]) ? $this->days[$dayNumber] : null;

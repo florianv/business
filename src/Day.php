@@ -125,10 +125,10 @@ final class Day
      *
      * @return bool
      */
-    public function isTimeWithin(Time $time)
+    public function isTimeWithinOpeningHours(Time $time)
     {
         foreach ($this->openingIntervals as $interval) {
-            if ($time->isAfterOrEqual($interval->getStart()) && $time->isBeforeOrEqual($interval->getEnd())) {
+            if ($interval->contains($time)) {
                 return true;
             }
         }
@@ -159,7 +159,7 @@ final class Day
     private function setDayOfWeek($dayOfWeek)
     {
         if (!in_array($dayOfWeek, Days::toArray())) {
-            throw new \InvalidArgumentException(sprintf('Invalid day of week "%s"', $dayOfWeek));
+            throw new \InvalidArgumentException(sprintf('Invalid day of week "%s".', $dayOfWeek));
         }
 
         $this->dayOfWeek = $dayOfWeek;
@@ -168,7 +168,7 @@ final class Day
     private function setOpeningIntervals(array $openingIntervals)
     {
         if (empty($openingIntervals)) {
-            throw new \InvalidArgumentException('The day must have at least one opening interval');
+            throw new \InvalidArgumentException('The day must have at least one opening interval.');
         }
 
         $this->openingIntervals = array();

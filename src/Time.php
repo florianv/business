@@ -118,4 +118,14 @@ final class Time
     {
         return (int) $this->hours.$this->minutes;
     }
+
+    /**
+     * Returns an integer representation of the time.
+     *
+     * @return integer
+     */
+    public function toString()
+    {
+        return sprintf('%s:%s', $this->hours, $this->minutes);
+    }
 }

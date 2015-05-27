@@ -18,20 +18,20 @@ class TimeIntervalTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The opening time "08:00" must be before the closing time "08:00"
+     * @expectedExceptionMessage The opening time "08:00" must be before the closing time "08:00".
      */
-    public function testFromStringOpeningEqualClosing()
+    public function testConstructorOpeningEqualClosing()
     {
-        TimeInterval::fromString('08:00', '08:00');
+        new TimeInterval(new Time('08', '00'), new Time('08', '00'));
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The opening time "18:00" must be before the closing time "08:00"
+     * @expectedExceptionMessage The opening time "18:00" must be before the closing time "08:00".
      */
-    public function testFromStringOpeningAfterClosing()
+    public function testConstructorOpeningAfterClosing()
     {
-        TimeInterval::fromString('18:00', '08:00');
+        new TimeInterval(new Time('18', '00'), new Time('08', '00'));
     }
 
     public function testFromString()

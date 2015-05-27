@@ -25,6 +25,14 @@ final class TimeInterval
     {
         $this->start = $start;
         $this->end = $end;
+
+        if ($start->isAfterOrEqual($end)) {
+            throw new \InvalidArgumentException(sprintf(
+                'The opening time "%s" must be before the closing time "%s".',
+                $start->toString(),
+                $end->toString()
+            ));
+        }
     }
 
     /**
@@ -39,18 +47,7 @@ final class TimeInterval
      */
     public static function fromString($startTime, $endTime)
     {
-        $start = Time::fromString($startTime);
-        $end = Time::fromString($endTime);
-
-        if ($start->isAfterOrEqual($end)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The opening time "%s" must be before the closing time "%s"',
-                $startTime,
-                $endTime
-            ));
-        }
-
-        return new self($start, $end);
+        return new self(Time::fromString($startTime), Time::fromString($endTime));
     }
 
     /**
@@ -62,7 +59,7 @@ final class TimeInterval
      */
     public function contains(Time $time)
     {
-        return $this->getStart()->isBeforeOrEqual($time) && $this->getEnd()->isAfterOrEqual($time);
+        return $this->start->isBeforeOrEqual($time) && $this->end->isAfterOrEqual($time);
     }
 
     /**

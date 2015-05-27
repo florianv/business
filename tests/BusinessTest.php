@@ -309,7 +309,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage At least one day must be added
+     * @expectedExceptionMessage At least one day must be added.
      */
     public function testExceptionEmptyDays()
     {
