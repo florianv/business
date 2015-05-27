@@ -18,7 +18,9 @@
             "homepage": "http://florian.voutzinos.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=5.4"
+    },
     "require-dev": {
         "phpunit/phpunit": "^4.6"
     },
