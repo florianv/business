@@ -1,6 +1,6 @@
-# Business [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url]
+# Business [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url] [![PHP Version][php-version-image]][php-version-url]
 
-> DateTime calculations in business hours for PHP 5.4+
+> DateTime calculations in business hours
 
 ## Installation
 
@@ -73,3 +73,6 @@ $lastDate = $business->closest(new \DateTime('2015-05-11 10:00'), Business::CLOS
 
 [version-url]: https://packagist.org/packages/florianv/business
 [version-image]: http://img.shields.io/packagist/v/florianv/business.svg?style=flat
+
+[php-version-url]: https://packagist.org/packages/florianv/business
+[php-version-image]: http://img.shields.io/badge/php-5.4+-ff69b4.svg
