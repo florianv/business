@@ -13,17 +13,27 @@ $ composer require florianv/business
 First you need to configure your business schedule:
 
 ```php
+use Business\SpecialDay;
 use Business\Day;
 use Business\Days;
 use Business\Business;
 
 // Opening hours for each week day. If not specified, it is considered closed
 $days = [
+    // Standard days with fixed opening hours
     new Day(Days::MONDAY, [['09:00', '13:00'], ['2pm', '5 PM']]),
     new Day(Days::TUESDAY, [['9 AM', '5 PM']]),
     new Day(Days::WEDNESDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
     new Day(Days::THURSDAY, [['10 AM', '5 PM']]),
-    new Day(Days::FRIDAY, [['9 AM', '12:00']]),
+    
+    // Special day with dynamic opening hours depending on the date
+    new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+        if ('2015-05-29' === $date->format('Y-m-d')) {
+            return [['9 AM', '12:00']];
+        }
+    
+        return [['9 AM', '5 PM']];
+    }),
 ];
 
 // Optional holiday dates

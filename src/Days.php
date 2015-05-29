@@ -26,7 +26,7 @@ final class Days
     const SATURDAY = 6;
     const SUNDAY = 7;
 
-    private static $strings = array(
+    private static $strings = [
         self::MONDAY => 'Monday',
         self::TUESDAY => 'Tuesday',
         self::WEDNESDAY => 'Wednesday',
@@ -34,7 +34,7 @@ final class Days
         self::FRIDAY => 'Friday',
         self::SATURDAY => 'Saturday',
         self::SUNDAY => 'Sunday'
-    );
+    ];
 
     /**
      * Returns a string representation of a day.
@@ -55,9 +55,7 @@ final class Days
      */
     public static function toArray()
     {
-        return array(
-            self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY
-        );
+        return [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY];
     }
 
     private function __construct()

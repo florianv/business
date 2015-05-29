@@ -25,11 +25,11 @@ final class Business implements BusinessInterface
     /**
      * Creates a new business.
      *
-     * @param Day[]      $days
+     * @param DayInterface[]     $days
      * @param \DateTime[]        $holidays
      * @param \DateTimeZone|null $timezone
      */
-    public function __construct(array $days, array $holidays = array(), \DateTimeZone $timezone = null)
+    public function __construct(array $days, array $holidays = [], \DateTimeZone $timezone = null)
     {
         $this->setDays($days);
         $this->setHolidays($holidays);
@@ -60,7 +60,7 @@ final class Business implements BusinessInterface
         $tmpDate->setTimezone($this->timezone);
 
         if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay((int) $tmpDate->format('N'))) {
-            return $day->isTimeWithinOpeningHours(Time::fromDate($tmpDate));
+            return $day->isTimeWithinOpeningHours(Time::fromDate($tmpDate), $tmpDate);
         }
 
         return false;
@@ -81,7 +81,7 @@ final class Business implements BusinessInterface
         $tmpEnd = clone $end;
         $tmpEnd->setTimezone($this->timezone);
 
-        $dates = array();
+        $dates = [];
         $lastDate = $tmpStart;
 
         while (true) {
@@ -113,7 +113,7 @@ final class Business implements BusinessInterface
         $time = Time::fromDate($tmpDate);
 
         if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
-            if (null !== $closestTime = $day->getClosestOpeningTimeBefore($time)) {
+            if (null !== $closestTime = $day->getClosestOpeningTimeBefore($time, $tmpDate)) {
                 $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes());
 
                 return $tmpDate;
@@ -127,7 +127,7 @@ final class Business implements BusinessInterface
         }
 
         $closestDay = $this->getClosestDayBefore((int) $tmpDate->format('N'));
-        $closingTime = $closestDay->getClosingTime();
+        $closingTime = $closestDay->getClosingTime($tmpDate);
         $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes());
 
         return $tmpDate;
@@ -169,7 +169,7 @@ final class Business implements BusinessInterface
         $time = Time::fromDate($tmpDate);
 
         if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
-            if (null !== $closestTime = $day->getClosestOpeningTimeAfter($time)) {
+            if (null !== $closestTime = $day->getClosestOpeningTimeAfter($time, $tmpDate)) {
                 $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes());
 
                 return $tmpDate;
@@ -183,7 +183,7 @@ final class Business implements BusinessInterface
         }
 
         $closestDay = $this->getClosestDayBefore((int) $tmpDate->format('N'));
-        $closingTime = $closestDay->getOpeningTime();
+        $closingTime = $closestDay->getOpeningTime($tmpDate);
         $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes());
 
         return $tmpDate;
@@ -292,14 +292,14 @@ final class Business implements BusinessInterface
      *
      * @param integer $dayNumber
      *
-     * @return Day|null
+     * @return DayInterface|null
      */
     private function getDay($dayNumber)
     {
         return isset($this->days[$dayNumber]) ? $this->days[$dayNumber] : null;
     }
 
-    private function addDay(Day $day)
+    private function addDay(DayInterface $day)
     {
         $this->days[$day->getDayOfWeek()] = $day;
     }
@@ -310,7 +310,7 @@ final class Business implements BusinessInterface
             throw new \InvalidArgumentException('At least one day must be added.');
         }
 
-        $this->days = array();
+        $this->days = [];
 
         foreach ($days as $day) {
             $this->addDay($day);
@@ -324,7 +324,7 @@ final class Business implements BusinessInterface
 
     private function setHolidays(array $holidays)
     {
-        $this->holidays = array();
+        $this->holidays = [];
 
         foreach ($holidays as $holiday) {
             $this->addHoliday($holiday);

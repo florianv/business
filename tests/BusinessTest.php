@@ -12,8 +12,10 @@
 namespace Business\Tests;
 
 use Business\Business;
+use Business\BusinessInterface;
 use Business\Days;
 use Business\Day;
+use Business\SpecialDay;
 
 class BusinessTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +23,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
     {
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            })
         ]);
 
         $this->assertTrue($business->within(new \DateTime('2015-05-11 10:00'))); // Monday
@@ -49,7 +53,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         date_default_timezone_set('Europe/Paris');
 
         $business = new Business([
-            new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::MONDAY, function (\DateTime $date) {
+                return [['09:00', '13:00'], ['14:00', '17:00']];
+            }),
             new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
         ]);
 
@@ -61,11 +67,46 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         date_default_timezone_set($tz);
     }
 
+    public function testWithinSpecialDaysCalledCorrectly()
+    {
+        $mondayOne = new \DateTime('2015-05-11 10:00');
+        $mondayTwo = new \DateTime('2015-05-18 10:00');
+        $tuesday = new \DateTime('2015-05-12 10:00');
+
+        $mondayOneCalls = 0;
+        $mondayTwoCalls = 0;
+        $tuesdayCalls = 0;
+
+        $business = new Business([
+            new SpecialDay(Days::MONDAY, function (\DateTime $date) use ($mondayOne, &$mondayOneCalls, $mondayTwo, &$mondayTwoCalls, $tuesday, &$tuesdayCalls) {
+                if ($date == $mondayOne) {
+                    $mondayOneCalls++;
+                } elseif ($date == $mondayTwo) {
+                    $mondayTwoCalls++;
+                } elseif ($date == $tuesday) {
+                    $tuesdayCalls++;
+                }
+
+                return [['09:00', '13:00'], ['14:00', '17:00']];
+            })
+        ]);
+
+        $business->within($mondayOne);
+        $business->within($mondayTwo);
+        $business->within($tuesday);
+
+        $this->assertEquals(1, $mondayOneCalls);
+        $this->assertEquals(1, $mondayTwoCalls);
+        $this->assertEquals(0, $tuesdayCalls);
+    }
+
     public function testClosestBefore()
     {
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         // Withing working hours
@@ -92,7 +133,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ], [$holidayOne, $holidayTwo]);
 
         $date = $business->closest($target, Business::CLOSEST_LAST);
@@ -120,7 +163,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         // Monday "2015-05-25 22:00:00" in Europe/Paris
@@ -132,11 +177,46 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         date_default_timezone_set($tz);
     }
 
+    public function testClosestBeforeSpecialDaysCalledCorrectly()
+    {
+        $mondayOne = new \DateTime('2015-05-11 10:00');
+        $mondayTwo = new \DateTime('2015-05-18 10:00');
+        $tuesday = new \DateTime('2015-05-12 10:00');
+
+        $mondayOneCalls = 0;
+        $mondayTwoCalls = 0;
+        $tuesdayCalls = 0;
+
+        $business = new Business([
+            new SpecialDay(Days::MONDAY, function (\DateTime $date) use ($mondayOne, &$mondayOneCalls, $mondayTwo, &$mondayTwoCalls, $tuesday, &$tuesdayCalls) {
+                if ($date == $mondayOne) {
+                    $mondayOneCalls++;
+                } elseif ($date == $mondayTwo) {
+                    $mondayTwoCalls++;
+                } elseif ($date == $tuesday) {
+                    $tuesdayCalls++;
+                }
+
+                return [['09:00', '13:00'], ['14:00', '17:00']];
+            })
+        ]);
+
+        $business->closest($mondayOne, BusinessInterface::CLOSEST_LAST);
+        $business->closest($mondayTwo, BusinessInterface::CLOSEST_LAST);
+        $business->closest($tuesday, BusinessInterface::CLOSEST_LAST);
+
+        $this->assertEquals(1, $mondayOneCalls);
+        $this->assertEquals(1, $mondayTwoCalls);
+        $this->assertEquals(0, $tuesdayCalls);
+    }
+
     public function testClosestAfter()
     {
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         // Withing working hours
@@ -163,7 +243,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ], [$holidayOne, $holidayTwo]);
 
         $date = $business->closest($target, Business::CLOSEST_NEXT);
@@ -191,7 +273,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         // Monday "2015-05-25 22:00:00" in Europe/Paris
@@ -201,6 +285,39 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2015-05-29 10:00', $closest->format('Y-m-d H:i')); // Next Friday
 
         date_default_timezone_set($tz);
+    }
+
+    public function testClosestAfterSpecialDaysCalledCorrectly()
+    {
+        $mondayOne = new \DateTime('2015-05-11 10:00');
+        $mondayTwo = new \DateTime('2015-05-18 10:00');
+        $tuesday = new \DateTime('2015-05-12 10:00');
+
+        $mondayOneCalls = 0;
+        $mondayTwoCalls = 0;
+        $tuesdayCalls = 0;
+
+        $business = new Business([
+            new SpecialDay(Days::MONDAY, function (\DateTime $date) use ($mondayOne, &$mondayOneCalls, $mondayTwo, &$mondayTwoCalls, $tuesday, &$tuesdayCalls) {
+                if ($date == $mondayOne) {
+                    $mondayOneCalls++;
+                } elseif ($date == $mondayTwo) {
+                    $mondayTwoCalls++;
+                } elseif ($date == $tuesday) {
+                    $tuesdayCalls++;
+                }
+
+                return [['09:00', '13:00'], ['14:00', '17:00']];
+            })
+        ]);
+
+        $business->closest($mondayOne);
+        $business->closest($mondayTwo);
+        $business->closest($tuesday);
+
+        $this->assertEquals(1, $mondayOneCalls);
+        $this->assertEquals(1, $mondayTwoCalls);
+        $this->assertEquals(0, $tuesdayCalls);
     }
 
     /**
@@ -220,7 +337,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
     {
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         $start = new \DateTime('2015-05-25 11:00'); // Monday
@@ -242,7 +361,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
     {
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ], [new \DateTime('2015-06-01')]);
 
         $start = new \DateTime('2015-05-24 11:00'); // Sunday
@@ -263,7 +384,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
     {
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         $start = new \DateTime('2015-05-25 11:30');
@@ -286,7 +409,9 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-            new Day(Days::FRIDAY, [['10:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
         ]);
 
         // Monday "2015-05-25 10:00:00" in Europe/Paris

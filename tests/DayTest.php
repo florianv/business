@@ -37,8 +37,9 @@ class DayTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClosestOpeningTimeBeforeInsideInterval()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
-        $closest = $day->getClosestOpeningTimeBefore(new Time('13', '00'));
+        $closest = $day->getClosestOpeningTimeBefore(new Time('13', '00'), $context);
 
         $this->assertSame(13, $closest->getHours());
         $this->assertSame(0, $closest->getMinutes());
@@ -46,8 +47,9 @@ class DayTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClosestOpeningTimeBeforeBetweenIntervals()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
-        $closest = $day->getClosestOpeningTimeBefore(new Time('14', '20'));
+        $closest = $day->getClosestOpeningTimeBefore(new Time('14', '20'), $context);
 
         $this->assertSame(14, $closest->getHours());
         $this->assertSame(0, $closest->getMinutes());
@@ -55,16 +57,18 @@ class DayTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClosestOpeningTimeBeforeOutsideIntervals()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
-        $closest = $day->getClosestOpeningTimeBefore(new Time('8', '0'));
+        $closest = $day->getClosestOpeningTimeBefore(new Time('8', '0'), $context);
 
         $this->assertNull($closest);
     }
 
     public function testGetClosestOpeningTimeAfterInsideInterval()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
-        $closest = $day->getClosestOpeningTimeAfter(new Time('13', '00'));
+        $closest = $day->getClosestOpeningTimeAfter(new Time('13', '00'), $context);
 
         $this->assertSame(13, $closest->getHours());
         $this->assertSame(0, $closest->getMinutes());
@@ -72,8 +76,9 @@ class DayTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClosestOpeningTimeAfterBetweenIntervals()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
-        $closest = $day->getClosestOpeningTimeAfter(new Time('14', '20'));
+        $closest = $day->getClosestOpeningTimeAfter(new Time('14', '20'), $context);
 
         $this->assertSame(14, $closest->getHours());
         $this->assertSame(30, $closest->getMinutes());
@@ -81,37 +86,41 @@ class DayTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClosestOpenTimeAfterOutsideIntervals()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
-        $closest = $day->getClosestOpeningTimeAfter(new Time('19', '00'));
+        $closest = $day->getClosestOpeningTimeAfter(new Time('19', '00'), $context);
 
         $this->assertNull($closest);
     }
 
     public function testGetOpeningTime()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['12:00', '2 pm'], ['14:30', '18:30'], ['09:00', '10 AM']]);
-        $this->assertEquals(9, $day->getOpeningTime()->getHours());
-        $this->assertEquals(0, $day->getOpeningTime()->getMinutes());
+        $this->assertEquals(9, $day->getOpeningTime($context)->getHours());
+        $this->assertEquals(0, $day->getOpeningTime($context)->getMinutes());
     }
 
     public function testGetClosingTime()
     {
+        $context = new \DateTime('2015-05-25');
         $day = new Day(Days::MONDAY, [['12:00', '2 pm'], ['14:30', '18:30'], ['09:00', '10 AM']]);
-        $this->assertEquals(18, $day->getClosingTime()->getHours());
-        $this->assertEquals(30, $day->getClosingTime()->getMinutes());
+        $this->assertEquals(18, $day->getClosingTime($context)->getHours());
+        $this->assertEquals(30, $day->getClosingTime($context)->getMinutes());
     }
 
     public function testIsTimeWithin()
     {
         $day = new Day(Days::MONDAY, [['12:00', '2 pm'], ['14:30', '18:30'], ['09:00', '10 AM']]);
+        $context = new \DateTime('2015-05-25');
 
-        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('14', '00')));
-        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('13', '00')));
-        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('18', '30')));
-        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('15', '00')));
-        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('09', '30')));
+        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('14', '00'), $context));
+        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('13', '00'), $context));
+        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('18', '30'), $context));
+        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('15', '00'), $context));
+        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('09', '30'), $context));
 
-        $this->assertFalse($day->isTimeWithinOpeningHours(new Time('08', '00')));
-        $this->assertFalse($day->isTimeWithinOpeningHours(new Time('20', '00')));
+        $this->assertFalse($day->isTimeWithinOpeningHours(new Time('08', '00'), $context));
+        $this->assertFalse($day->isTimeWithinOpeningHours(new Time('20', '00'), $context));
     }
 }
