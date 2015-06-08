@@ -123,4 +123,18 @@ class DayTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($day->isTimeWithinOpeningHours(new Time('08', '00'), $context));
         $this->assertFalse($day->isTimeWithinOpeningHours(new Time('20', '00'), $context));
     }
+
+    public function testSerializeUnserialize()
+    {
+        $day = new Day(Days::MONDAY, [['12:00', '2 pm'], ['14:30', '18:30'], ['09:00', '10 AM']]);
+
+        $serialized = serialize($day);
+        $unserialized = unserialize($serialized);
+
+        $this->assertEquals($day->getDayOfWeek(), $unserialized->getDayOfWeek());
+        $this->assertEquals(
+            TestUtil::getPropertyValue($day, 'openingIntervals'),
+            TestUtil::getPropertyValue($unserialized, 'openingIntervals')
+        );
+    }
 }

@@ -16,6 +16,21 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Day extends AbstractDay
+final class Day extends AbstractDay implements \Serializable
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([$this->dayOfWeek, $this->openingIntervals]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list($this->dayOfWeek, $this->openingIntervals) = unserialize($serialized);
+    }
 }

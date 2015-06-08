@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Business implements BusinessInterface
+final class Business implements BusinessInterface, \Serializable
 {
     private $days;
     private $holidays;
@@ -97,6 +97,24 @@ final class Business implements BusinessInterface
         }
 
         return $dates;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([$this->days, $this->holidays, $this->timezone->getName()]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        list($this->days, $this->holidays) = $data;
+        $this->timezone = new \DateTimeZone($data[2]);
     }
 
     /**

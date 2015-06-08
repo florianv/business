@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class SpecialDay extends AbstractDay
+final class SpecialDay extends AbstractDay implements \Serializable
 {
     private $openingIntervalsCache = [];
     private $openingIntervalsEvaluator;
@@ -98,5 +98,39 @@ final class SpecialDay extends AbstractDay
         }
 
         $this->setOpeningIntervals($this->openingIntervalsCache[$contextHash]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->dayOfWeek,
+            $this->openingIntervalsCache,
+            $this->getSerializer()->serialize($this->openingIntervalsEvaluator)
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        list($this->dayOfWeek, $this->openingIntervalsCache) = $data;
+        $this->openingIntervalsEvaluator = $this->getSerializer()->unserialize($data[2]);
+    }
+
+    /**
+     * @return \SuperClosure\Serializer
+     */
+    private function getSerializer()
+    {
+        if (!class_exists('\SuperClosure\Serializer')) {
+            throw new \RuntimeException('You must install "jeremeamia/superclosure" in order to serialize a special day.');
+        }
+
+        return new \SuperClosure\Serializer();
     }
 }

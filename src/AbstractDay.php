@@ -21,7 +21,7 @@ abstract class AbstractDay implements DayInterface
     /**
      * @var TimeInterval[]
      */
-    private $openingIntervals;
+    protected $openingIntervals;
     protected $dayOfWeek;
 
     /**

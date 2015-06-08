@@ -141,4 +141,30 @@ class SpecialDayTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($day->isTimeWithinOpeningHours(new Time('08', '00'), $monday));
         $this->assertFalse($day->isTimeWithinOpeningHours(new Time('20', '00'), $monday));
     }
+
+    public function testSerializeUnserialize()
+    {
+        $monday = new \DateTime('2015-05-25');
+        $day = new SpecialDay(Days::MONDAY, function (\DateTime $date) {
+            if ('2015-05-25' == $date->format('Y-m-d')) {
+                return [['14:00', '17:00'], ['06:00', '07:00']];
+            }
+
+            return [['12:00', '18:00']];
+        });
+
+        $serialized = serialize($day);
+        $unserialized = unserialize($serialized);
+
+        $this->assertEquals($day->getDayOfWeek(), $unserialized->getDayOfWeek());
+
+        $this->assertEquals(
+            TestUtil::getPropertyValue($day, 'openingIntervalsCache'),
+            TestUtil::getPropertyValue($unserialized, 'openingIntervalsCache')
+        );
+
+        // Instead of comparing closures we check the output is the same
+        $this->assertTrue($day->isTimeWithinOpeningHours(new Time('14', '00'), $monday));
+        $this->assertFalse($day->isTimeWithinOpeningHours(new Time('08', '00'), $monday));
+    }
 }
