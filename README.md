@@ -74,6 +74,21 @@ $nextDate = $business->closest(new \DateTime('2015-05-11 10:00'));
 $lastDate = $business->closest(new \DateTime('2015-05-11 10:00'), Business::CLOSEST_LAST);
 ```
 
+### Serialization
+
+The `Business` class can be serialized so it can be stored for later reuse:
+
+```php
+$serialized = serialize($business);
+$business = unserialize($serialized);
+```
+
+If you use `SpecialDay` instances, you need to install the `jeremeamia/superclosure` library providing closure serialization:
+
+```bash
+$ composer require jeremeamia/superclosure
+```
+
 ## License
 
 [MIT](https://github.com/florianv/business/blob/master/LICENSE)
