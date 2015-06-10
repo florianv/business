@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Business by florianv</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Business</h1>
+      <h2 class="project-tagline">DateTime calculations in business hours</h2>
+      <a href="https://github.com/florianv/business" class="btn">View on GitHub</a>
+      <a href="https://github.com/florianv/business/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/florianv/business/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="business---" class="anchor" href="#business---" aria-hidden="true"><span class="octicon octicon-link"></span></a>Business <a href="https://travis-ci.org/florianv/business"><img src="http://img.shields.io/travis/florianv/business.svg?style=flat" alt="Build status"></a> <a href="https://packagist.org/packages/florianv/business"><img src="http://img.shields.io/packagist/v/florianv/business.svg?style=flat" alt="Version"></a> <a href="https://packagist.org/packages/florianv/business"><img src="http://img.shields.io/badge/php-5.4+-ff69b4.svg" alt="PHP Version"></a>
+</h1>
+
+<blockquote>
+<p>DateTime calculations in business hours</p>
+</blockquote>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<div class="highlight highlight-bash"><pre>$ composer require florianv/business</pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>First you need to configure your business schedule:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\SpecialDay</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Day</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Days</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Business</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Opening hours for each week day. If not specified, it is considered closed</span></span>
+<span class="pl-s1"><span class="pl-smi">$days</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-c">// Standard days with fixed opening hours</span></span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">Day</span>(<span class="pl-c1">Days</span><span class="pl-k">::</span><span class="pl-c1">MONDAY</span>, [[<span class="pl-s"><span class="pl-pds">'</span>09:00<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>13:00<span class="pl-pds">'</span></span>], [<span class="pl-s"><span class="pl-pds">'</span>2pm<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>5 PM<span class="pl-pds">'</span></span>]]),</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">Day</span>(<span class="pl-c1">Days</span><span class="pl-k">::</span><span class="pl-c1">TUESDAY</span>, [[<span class="pl-s"><span class="pl-pds">'</span>9 AM<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>5 PM<span class="pl-pds">'</span></span>]]),</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">Day</span>(<span class="pl-c1">Days</span><span class="pl-k">::</span><span class="pl-c1">WEDNESDAY</span>, [[<span class="pl-s"><span class="pl-pds">'</span>10:00<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>13:00<span class="pl-pds">'</span></span>], [<span class="pl-s"><span class="pl-pds">'</span>14:00<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>17:00<span class="pl-pds">'</span></span>]]),</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">Day</span>(<span class="pl-c1">Days</span><span class="pl-k">::</span><span class="pl-c1">THURSDAY</span>, [[<span class="pl-s"><span class="pl-pds">'</span>10 AM<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>5 PM<span class="pl-pds">'</span></span>]]),</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">// Special day with dynamic opening hours depending on the date</span></span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">SpecialDay</span>(<span class="pl-c1">Days</span><span class="pl-k">::</span><span class="pl-c1">FRIDAY</span>, <span class="pl-k">function</span> (<span class="pl-c1">\DateTime</span> <span class="pl-smi">$date</span>) {</span>
+<span class="pl-s1">        <span class="pl-k">if</span> (<span class="pl-s"><span class="pl-pds">'</span>2015-05-29<span class="pl-pds">'</span></span> <span class="pl-k">===</span> <span class="pl-smi">$date</span><span class="pl-k">-&gt;</span>format(<span class="pl-s"><span class="pl-pds">'</span>Y-m-d<span class="pl-pds">'</span></span>)) {</span>
+<span class="pl-s1">            <span class="pl-k">return</span> [[<span class="pl-s"><span class="pl-pds">'</span>9 AM<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>12:00<span class="pl-pds">'</span></span>]];</span>
+<span class="pl-s1">        }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">        <span class="pl-k">return</span> [[<span class="pl-s"><span class="pl-pds">'</span>9 AM<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>5 PM<span class="pl-pds">'</span></span>]];</span>
+<span class="pl-s1">    }),</span>
+<span class="pl-s1">];</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Optional holiday dates</span></span>
+<span class="pl-s1"><span class="pl-smi">$holidays</span> <span class="pl-k">=</span> [<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-01<span class="pl-pds">'</span></span>), <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-02<span class="pl-pds">'</span></span>)];</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Optional business timezone</span></span>
+<span class="pl-s1"><span class="pl-smi">$timezone</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\DateTimeZone</span>(<span class="pl-s"><span class="pl-pds">'</span>Europe/Paris<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Create a new Business instance</span></span>
+<span class="pl-s1"><span class="pl-smi">$business</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Business</span>(<span class="pl-smi">$days</span>, <span class="pl-smi">$holidays</span>, <span class="pl-smi">$timezone</span>);</span></pre></div>
+
+<h3>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<h5>
+<a id="within---tells-if-a-date-is-within-business-hours" class="anchor" href="#within---tells-if-a-date-is-within-business-hours" aria-hidden="true"><span class="octicon octicon-link"></span></a>within() - Tells if a date is within business hours</h5>
+
+<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$bool</span> <span class="pl-k">=</span> <span class="pl-smi">$business</span><span class="pl-k">-&gt;</span>within(<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-05-11 10:00<span class="pl-pds">'</span></span>));</span></pre></div>
+
+<h5>
+<a id="timeline---returns-a-timeline-of-business-dates" class="anchor" href="#timeline---returns-a-timeline-of-business-dates" aria-hidden="true"><span class="octicon octicon-link"></span></a>timeline() - Returns a timeline of business dates</h5>
+
+<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$start</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-05-11 10:00<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$end</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-05-14 10:00<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$interval</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\DateInterval</span>(<span class="pl-s"><span class="pl-pds">'</span>P1D<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$dates</span> <span class="pl-k">=</span> <span class="pl-smi">$business</span><span class="pl-k">-&gt;</span>timeline(<span class="pl-smi">$start</span>, <span class="pl-smi">$end</span>, <span class="pl-smi">$interval</span>);</span></pre></div>
+
+<h5>
+<a id="closest---returns-the-closest-business-date-from-a-given-date" class="anchor" href="#closest---returns-the-closest-business-date-from-a-given-date" aria-hidden="true"><span class="octicon octicon-link"></span></a>closest() - Returns the closest business date from a given date</h5>
+
+<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-c">// After that date (including it)</span></span>
+<span class="pl-s1"><span class="pl-smi">$nextDate</span> <span class="pl-k">=</span> <span class="pl-smi">$business</span><span class="pl-k">-&gt;</span>closest(<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-05-11 10:00<span class="pl-pds">'</span></span>));</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Before that date (including it)</span></span>
+<span class="pl-s1"><span class="pl-smi">$lastDate</span> <span class="pl-k">=</span> <span class="pl-smi">$business</span><span class="pl-k">-&gt;</span>closest(<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-05-11 10:00<span class="pl-pds">'</span></span>), <span class="pl-c1">Business</span><span class="pl-k">::</span><span class="pl-c1">CLOSEST_LAST</span>);</span></pre></div>
+
+<h3>
+<a id="serialization" class="anchor" href="#serialization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Serialization</h3>
+
+<p>The <code>Business</code> class can be serialized so it can be stored for later reuse:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$serialized</span> <span class="pl-k">=</span> <span class="pl-c1">serialize</span>(<span class="pl-smi">$business</span>);</span>
+<span class="pl-s1"><span class="pl-smi">$business</span> <span class="pl-k">=</span> <span class="pl-c1">unserialize</span>(<span class="pl-smi">$serialized</span>);</span></pre></div>
+
+<p>If you use <code>SpecialDay</code> instances, you need to install the <code>jeremeamia/superclosure</code> library providing closure serialization:</p>
+
+<div class="highlight highlight-bash"><pre>$ composer require jeremeamia/superclosure</pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="https://github.com/florianv/business/blob/master/LICENSE">MIT</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/florianv/business">Business</a> is maintained by <a href="https://github.com/florianv">florianv</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
