@@ -15,6 +15,7 @@ use Business\Business;
 use Business\BusinessInterface;
 use Business\Days;
 use Business\Day;
+use Business\Holidays;
 use Business\SpecialDay;
 
 class BusinessTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +42,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-        ], [$holiday]);
+        ], new Holidays([$holiday]));
 
         $this->assertFalse($business->within($holiday));
         $this->assertTrue($business->within(new \DateTime('2015-05-18 10:00')));
@@ -136,7 +137,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
             new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
                 return [['10:00', '13:00'], ['14:00', '17:00']];
             }),
-        ], [$holidayOne, $holidayTwo]);
+        ], new Holidays([$holidayOne, $holidayTwo]));
 
         $date = $business->closest($target, Business::CLOSEST_LAST);
         $this->assertEquals('2015-05-01 17:00:00', $date->format('Y-m-d H:i:s')); // Last Friday
@@ -149,7 +150,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-        ], [$holiday]);
+        ], new Holidays([$holiday]));
 
         $date = $business->closest($target, Business::CLOSEST_LAST);
 
@@ -246,7 +247,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
             new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
                 return [['10:00', '13:00'], ['14:00', '17:00']];
             }),
-        ], [$holidayOne, $holidayTwo]);
+        ], new Holidays([$holidayOne, $holidayTwo]));
 
         $date = $business->closest($target, Business::CLOSEST_NEXT);
         $this->assertEquals('2015-05-22 10:00:00', $date->format('Y-m-d H:i:s')); // Next Friday
@@ -259,7 +260,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
-        ], [$holiday]);
+        ], new Holidays([$holiday]));
 
         $date = $business->closest($target, Business::CLOSEST_NEXT);
 
@@ -364,7 +365,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
             new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
                 return [['10:00', '13:00'], ['14:00', '17:00']];
             }),
-        ], [new \DateTime('2015-06-01')]);
+        ], new Holidays([new \DateTime('2015-06-01')]));
 
         $start = new \DateTime('2015-05-24 11:00'); // Sunday
         $end = new \DateTime('2015-06-05 13:00'); // Friday of the next week
@@ -450,7 +451,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
             new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
                 return [['10:00', '13:00'], ['14:00', '17:00']];
             }),
-        ], [$holiday]);
+        ], new Holidays([$holiday]));
 
         $serialized = serialize($business);
         $unserialized = unserialize($serialized);
@@ -470,5 +471,33 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
             TestUtil::getPropertyValue($business, 'timezone'),
             TestUtil::getPropertyValue($unserialized, 'timezone')
         );
+    }
+
+    public function testBackwardsCompatibleArrays()
+    {
+        $holiday = new \DateTime('2015-05-11');
+
+        $business = new Business([
+            new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
+        ], [$holiday]);
+
+        $this->assertFalse($business->within($holiday));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The holidays parameter must be an array of \DateTime objects, an instance of Business\Holidays or null.
+     */
+    public function testBackwardsCompatibleException()
+    {
+        $business = new Business([
+            new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
+        ], new \stdClass);
     }
 }

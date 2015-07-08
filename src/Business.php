@@ -25,14 +25,22 @@ final class Business implements BusinessInterface, \Serializable
     /**
      * Creates a new business.
      *
-     * @param DayInterface[]     $days
-     * @param \DateTime[]        $holidays
-     * @param \DateTimeZone|null $timezone
+     * @param DayInterface[]            $days
+     * @param Holidays|\DateTime[]|null $holidays
+     * @param \DateTimeZone|null        $timezone
      */
-    public function __construct(array $days, array $holidays = [], \DateTimeZone $timezone = null)
+    public function __construct(array $days, $holidays = null, \DateTimeZone $timezone = null)
     {
+        if (is_array($holidays)) {
+            $holidays = new Holidays($holidays);
+        } elseif (is_null($holidays)) {
+            $holidays = new Holidays();
+        } elseif (!$holidays instanceof Holidays) {
+            throw new \InvalidArgumentException('The holidays parameter must be an array of \DateTime objects, an instance of Business\Holidays or null.');
+        }
+
         $this->setDays($days);
-        $this->setHolidays($holidays);
+        $this->holidays = $holidays;
         $this->timezone = $timezone ?: new \DateTimeZone(date_default_timezone_get());
     }
 
@@ -59,7 +67,7 @@ final class Business implements BusinessInterface, \Serializable
         $tmpDate = clone $date;
         $tmpDate->setTimezone($this->timezone);
 
-        if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay((int) $tmpDate->format('N'))) {
+        if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay((int) $tmpDate->format('N'))) {
             return $day->isTimeWithinOpeningHours(Time::fromDate($tmpDate), $tmpDate);
         }
 
@@ -130,7 +138,7 @@ final class Business implements BusinessInterface, \Serializable
         $dayOfWeek = (int) $tmpDate->format('N');
         $time = Time::fromDate($tmpDate);
 
-        if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
+        if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
             if (null !== $closestTime = $day->getClosestOpeningTimeBefore($time, $tmpDate)) {
                 $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes());
 
@@ -140,7 +148,7 @@ final class Business implements BusinessInterface, \Serializable
 
         $tmpDate = $this->getDateBefore($tmpDate);
 
-        while ($this->isHoliday($tmpDate)) {
+        while ($this->holidays->isHoliday($tmpDate)) {
             $tmpDate = $this->getDateBefore($tmpDate);
         }
 
@@ -186,7 +194,7 @@ final class Business implements BusinessInterface, \Serializable
         $dayOfWeek = (int) $tmpDate->format('N');
         $time = Time::fromDate($tmpDate);
 
-        if (!$this->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
+        if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
             if (null !== $closestTime = $day->getClosestOpeningTimeAfter($time, $tmpDate)) {
                 $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes());
 
@@ -196,7 +204,7 @@ final class Business implements BusinessInterface, \Serializable
 
         $tmpDate = $this->getDateAfter($tmpDate);
 
-        while ($this->isHoliday($tmpDate)) {
+        while ($this->holidays->isHoliday($tmpDate)) {
             $tmpDate = $this->getDateAfter($tmpDate);
         }
 
@@ -333,24 +341,5 @@ final class Business implements BusinessInterface, \Serializable
         foreach ($days as $day) {
             $this->addDay($day);
         }
-    }
-
-    private function addHoliday(\DateTime $holiday)
-    {
-        $this->holidays[$holiday->format('Y-m-d')] = $holiday;
-    }
-
-    private function setHolidays(array $holidays)
-    {
-        $this->holidays = [];
-
-        foreach ($holidays as $holiday) {
-            $this->addHoliday($holiday);
-        }
-    }
-
-    private function isHoliday(\DateTime $date)
-    {
-        return isset($this->holidays[$date->format('Y-m-d')]);
     }
 }
