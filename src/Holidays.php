@@ -18,7 +18,7 @@ namespace Business;
  */
 final class Holidays implements \Serializable
 {
-    private $holidays = [];
+    private $holidays;
 
     /**
      * Creates a new holiday collection.
@@ -27,6 +27,8 @@ final class Holidays implements \Serializable
      */
     public function __construct(array $holidays = [])
     {
+        $this->holidays = new DateTimeStorage();
+
         $this->addHolidays($holidays);
     }
 
@@ -41,7 +43,7 @@ final class Holidays implements \Serializable
      */
     public function isHoliday(\DateTime $date)
     {
-        return isset($this->holidays[$date->format('Y-m-d')]);
+        return $this->holidays->contains($date);
     }
 
     /**
@@ -60,11 +62,21 @@ final class Holidays implements \Serializable
         $this->holidays = unserialize($serialized);
     }
 
+    /**
+     * Adds a day.
+     *
+     * @param \DateTime $holiday
+     */
     private function addHoliday(\DateTime $holiday)
     {
         $this->holidays[$holiday->format('Y-m-d')] = $holiday;
     }
 
+    /**
+     * Adds a set of days.
+     *
+     * @param \DateTime[]|DateTimePeriod[]|DateTimePeriod $holidays
+     */
     private function addHolidays($holidays)
     {
         foreach ($holidays as $holiday) {
@@ -74,7 +86,7 @@ final class Holidays implements \Serializable
                 continue;
             }
 
-            $this->addHoliday($holiday);
+            $this->holidays->attach($holiday);
         }
     }
 }
