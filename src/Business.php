@@ -240,9 +240,9 @@ final class Business implements BusinessInterface, \Serializable
     /**
      * Gets the closest business day before a given day number (including it).
      *
-     * @param integer $dayNumber
+     * @param int $dayNumber
      *
-     * @return Day|null
+     * @return DayInterface|null
      */
     private function getClosestDayBefore($dayNumber)
     {
@@ -256,9 +256,9 @@ final class Business implements BusinessInterface, \Serializable
     /**
      * Gets the closest business day after a given day number (including it).
      *
-     * @param integer $dayNumber
+     * @param int $dayNumber
      *
-     * @return Day|null
+     * @return DayInterface|null
      */
     private function getClosestDayAfter($dayNumber)
     {
@@ -272,9 +272,9 @@ final class Business implements BusinessInterface, \Serializable
     /**
      * Gets the business day before the day number.
      *
-     * @param integer $dayNumber
+     * @param int $dayNumber
      *
-     * @return Day|null
+     * @return DayInterface|null
      */
     private function getDayBefore($dayNumber)
     {
@@ -294,9 +294,9 @@ final class Business implements BusinessInterface, \Serializable
     /**
      * Gets the business day after the day number.
      *
-     * @param integer $dayNumber
+     * @param int $dayNumber
      *
-     * @return Day|null
+     * @return DayInterface|null
      */
     private function getDayAfter($dayNumber)
     {
@@ -316,7 +316,7 @@ final class Business implements BusinessInterface, \Serializable
     /**
      * Gets the day corresponding to the day number.
      *
-     * @param integer $dayNumber
+     * @param int $dayNumber
      *
      * @return DayInterface|null
      */
@@ -325,11 +325,23 @@ final class Business implements BusinessInterface, \Serializable
         return isset($this->days[$dayNumber]) ? $this->days[$dayNumber] : null;
     }
 
+    /**
+     * Adds a day.
+     *
+     * @param DayInterface $day
+     */
     private function addDay(DayInterface $day)
     {
         $this->days[$day->getDayOfWeek()] = $day;
     }
 
+    /**
+     * Adds a set of days.
+     *
+     * @param DayInterface[] $days
+     *
+     * @throws \InvalidArgumentException If no days are passed
+     */
     private function setDays(array $days)
     {
         if (empty($days)) {

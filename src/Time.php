@@ -40,7 +40,7 @@ final class Time
      *
      * @return Time
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException If the passed time is invalid
      */
     public static function fromString($time)
     {
@@ -92,7 +92,7 @@ final class Time
     /**
      * Gets the hours.
      *
-     * @return integer
+     * @return int
      */
     public function getHours()
     {
@@ -102,7 +102,7 @@ final class Time
     /**
      * Gets the minutes.
      *
-     * @return integer
+     * @return int
      */
     public function getMinutes()
     {
@@ -122,7 +122,7 @@ final class Time
     /**
      * Returns an integer representation of the time.
      *
-     * @return integer
+     * @return int
      */
     public function toString()
     {

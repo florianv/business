@@ -11,6 +11,8 @@
 
 namespace Business;
 
+use SuperClosure\Serializer;
+
 /**
  * Represents a special day.
  *
@@ -22,9 +24,9 @@ final class SpecialDay extends AbstractDay implements \Serializable
     private $openingIntervalsEvaluator;
 
     /**
-     * Constructor.
+     * Creates a new special day.
      *
-     * @param integer  $dayOfWeek                 The day of week
+     * @param int      $dayOfWeek                 The day of week
      * @param callable $openingIntervalsEvaluator A callable to evaluate opening intervals of the day
      */
     public function __construct($dayOfWeek, callable $openingIntervalsEvaluator)
@@ -83,6 +85,13 @@ final class SpecialDay extends AbstractDay implements \Serializable
         return parent::getClosingTime($context);
     }
 
+    /**
+     * Evaluates the opening intervals.
+     *
+     * @param \DateTime $context
+     *
+     * @throws \RuntimeException If the evaluated interval is invalid
+     */
     private function evaluateOpeningIntervals(\DateTime $context)
     {
         $contextHash = $context->format(\DateTime::ISO8601);
@@ -123,14 +132,18 @@ final class SpecialDay extends AbstractDay implements \Serializable
     }
 
     /**
-     * @return \SuperClosure\Serializer
+     * Gets a closure serializer object.
+     *
+     * @return Serializer
+     *
+     * @throws \RuntimeException If jeremeamia/superclosure is not isntalled
      */
     private function getSerializer()
     {
-        if (!class_exists('\SuperClosure\Serializer')) {
+        if (!class_exists('SuperClosure\Serializer')) {
             throw new \RuntimeException('You must install "jeremeamia/superclosure" in order to serialize a special day.');
         }
 
-        return new \SuperClosure\Serializer();
+        return new Serializer();
     }
 }
