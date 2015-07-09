@@ -21,6 +21,14 @@ final class TimeInterval
     private $start;
     private $end;
 
+    /**
+     * Creates a time interval.
+     *
+     * @param Time $start
+     * @param Time $end
+     *
+     * @throws \InvalidArgumentException If the opening time is not earlier than closing time
+     */
     public function __construct(Time $start, Time $end)
     {
         $this->start = $start;

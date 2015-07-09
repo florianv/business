@@ -39,7 +39,7 @@ final class Days
     /**
      * Returns a string representation of a day.
      *
-     * @param integer $dayOfWeek
+     * @param int $dayOfWeek
      *
      * @return string|null
      */

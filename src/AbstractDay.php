@@ -138,6 +138,13 @@ abstract class AbstractDay implements DayInterface
         return end($this->openingIntervals)->getEnd();
     }
 
+    /**
+     * Sets the day of week.
+     *
+     * @param int $dayOfWeek
+     *
+     * @throws \InvalidArgumentException If the given day is invalid
+     */
     protected function setDayOfWeek($dayOfWeek)
     {
         if (!in_array($dayOfWeek, Days::toArray())) {
@@ -147,6 +154,13 @@ abstract class AbstractDay implements DayInterface
         $this->dayOfWeek = $dayOfWeek;
     }
 
+    /**
+     * Sets the opening intervals.
+     *
+     * @param array $openingIntervals
+     *
+     * @throws \InvalidArgumentException If no days are passed or invalid interval is passed
+     */
     protected function setOpeningIntervals(array $openingIntervals)
     {
         if (empty($openingIntervals)) {

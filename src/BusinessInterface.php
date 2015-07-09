@@ -33,11 +33,13 @@ interface BusinessInterface
     /**
      * Returns a timeline of business dates.
      *
-     * @param \DateTime $start        The start date
-     * @param \DateTime $end          The end date
+     * @param \DateTime     $start    The start date
+     * @param \DateTime     $end      The end date
      * @param \DateInterval $interval The interval between two dates
      *
      * @return \DateTime[]
+     *
+     * @throws \LogicException If the start date is not earlier than end date
      */
     public function timeline(\DateTime $start, \DateTime $end, \DateInterval $interval);
 
@@ -45,7 +47,7 @@ interface BusinessInterface
      * Returns the closest business date and time from the given date.
      *
      * @param \DateTime $date The date
-     * @param integer   $mode The mode CLOSEST_* constant
+     * @param int       $mode The mode CLOSEST_* constant
      *
      * @return \DateTime
      *
