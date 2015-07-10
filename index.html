@@ -41,6 +41,8 @@
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Day</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Days</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Business</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Holidays</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\DateTimePeriod</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Opening hours for each week day. If not specified, it is considered closed</span></span>
 <span class="pl-s1"><span class="pl-smi">$days</span> <span class="pl-k">=</span> [</span>
@@ -61,7 +63,11 @@
 <span class="pl-s1">];</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Optional holiday dates</span></span>
-<span class="pl-s1"><span class="pl-smi">$holidays</span> <span class="pl-k">=</span> [<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-01<span class="pl-pds">'</span></span>), <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-02<span class="pl-pds">'</span></span>)];</span>
+<span class="pl-s1"><span class="pl-smi">$holidays</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Holidays</span>([</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-01<span class="pl-pds">'</span></span>),</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-02<span class="pl-pds">'</span></span>),</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">DateTimePeriod</span>(<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-07-08<span class="pl-pds">'</span></span>), <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-07-11<span class="pl-pds">'</span></span>)),</span>
+<span class="pl-s1">]);</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Optional business timezone</span></span>
 <span class="pl-s1"><span class="pl-smi">$timezone</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\DateTimeZone</span>(<span class="pl-s"><span class="pl-pds">'</span>Europe/Paris<span class="pl-pds">'</span></span>);</span>
