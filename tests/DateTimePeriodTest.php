@@ -21,7 +21,7 @@ class DateTimePeriodTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DatePeriod', $dateTimePeriod->getIterator());
 
-        $expexted = [
+        $expected = [
             '2015-07-08',
             '2015-07-09',
             '2015-07-10',
@@ -35,7 +35,7 @@ class DateTimePeriodTest extends \PHPUnit_Framework_TestCase
             $actual[] = $dateTime->format('Y-m-d');
         }
 
-        $this->assertEquals($expexted, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
