@@ -23,7 +23,7 @@ final class Holidays implements \Serializable
     /**
      * Creates a new holiday collection.
      *
-     * @param \DateTime[]|DateTimePeriod[] $holidays
+     * @param \DateTime[]|DateRange[] $holidays
      */
     public function __construct(array $holidays = [])
     {
@@ -75,12 +75,12 @@ final class Holidays implements \Serializable
     /**
      * Adds a set of days.
      *
-     * @param \DateTime[]|DateTimePeriod[]|DateTimePeriod $holidays
+     * @param \DateTime[]|DateRange[]|DateRange $holidays
      */
     private function addHolidays($holidays)
     {
         foreach ($holidays as $holiday) {
-            if ($holiday instanceof DateTimePeriod) {
+            if ($holiday instanceof DateRange) {
                 $this->addHolidays($holiday);
 
                 continue;

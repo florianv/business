@@ -18,7 +18,7 @@ use Business\Day;
 use Business\Days;
 use Business\Business;
 use Business\Holidays;
-use Business\DateTimePeriod;
+use Business\DateRange;
 
 // Opening hours for each week day. If not specified, it is considered closed
 $days = [
@@ -42,7 +42,7 @@ $days = [
 $holidays = new Holidays([
     new \DateTime('2015-01-01'),
     new \DateTime('2015-01-02'),
-    new DateTimePeriod(new \DateTime('2015-07-08'), new \DateTime('2015-07-11')),
+    new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-11')),
 ]);
 
 // Optional business timezone

@@ -11,7 +11,7 @@
 
 namespace Business\Tests;
 
-use Business\DateTimePeriod;
+use Business\DateRange;
 use Business\Holidays;
 
 class HolidaysTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class HolidaysTest extends \PHPUnit_Framework_TestCase
     {
         $holidays = new Holidays([
             $holiday = new \DateTime('2015-05-11'),
-            new DateTimePeriod(new \DateTime('2015-07-08'), new \DateTime('2015-07-21'))
+            new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-21'))
         ]);
 
         $this->assertTrue($holidays->isHoliday($holiday));
@@ -31,7 +31,7 @@ class HolidaysTest extends \PHPUnit_Framework_TestCase
     {
         $holidays = new Holidays([
             $holiday = new \DateTime('2015-05-11'),
-            new DateTimePeriod(new \DateTime('2015-07-08'), new \DateTime('2015-07-21'))
+            new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-21'))
         ]);
 
         $serialized = serialize($holidays);

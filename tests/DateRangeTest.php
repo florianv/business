@@ -11,15 +11,15 @@
 
 namespace Business\Tests;
 
-use Business\DateTimePeriod;
+use Business\DateRange;
 
-class DateTimePeriodTest extends \PHPUnit_Framework_TestCase
+class DateRangeTest extends \PHPUnit_Framework_TestCase
 {
     public function testIterator()
     {
-        $dateTimePeriod = new DateTimePeriod(new \DateTime('2015-07-08'), new \DateTime('2015-07-13'));
+        $dateRange = new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-13'));
 
-        $this->assertInstanceOf('DatePeriod', $dateTimePeriod->getIterator());
+        $this->assertInstanceOf('DatePeriod', $dateRange->getIterator());
 
         $expected = [
             '2015-07-08',
@@ -31,7 +31,7 @@ class DateTimePeriodTest extends \PHPUnit_Framework_TestCase
         ];
         $actual = [];
 
-        foreach ($dateTimePeriod as $dateTime) {
+        foreach ($dateRange as $dateTime) {
             $actual[] = $dateTime->format('Y-m-d');
         }
 
@@ -44,6 +44,6 @@ class DateTimePeriodTest extends \PHPUnit_Framework_TestCase
      */
     public function testStartDateIsEarlier()
     {
-        $dateTimePeriod = new DateTimePeriod(new \DateTime('2015-07-08'), new \DateTime('2015-07-07'));
+        new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-07'));
     }
 }

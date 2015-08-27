@@ -12,11 +12,11 @@
 namespace Business;
 
 /**
- * DateTime period implementation.
+ * Date range.
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-final class DateTimePeriod implements \IteratorAggregate
+final class DateRange implements \IteratorAggregate
 {
     private $datePeriod;
 
