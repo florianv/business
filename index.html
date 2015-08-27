@@ -5,7 +5,7 @@
     <title>Business by florianv</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -42,7 +42,7 @@
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Days</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Business</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\Holidays</span>;</span>
-<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\DateTimePeriod</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Business\DateRange</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Opening hours for each week day. If not specified, it is considered closed</span></span>
 <span class="pl-s1"><span class="pl-smi">$days</span> <span class="pl-k">=</span> [</span>
@@ -66,7 +66,7 @@
 <span class="pl-s1"><span class="pl-smi">$holidays</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Holidays</span>([</span>
 <span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-01<span class="pl-pds">'</span></span>),</span>
 <span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-01-02<span class="pl-pds">'</span></span>),</span>
-<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">DateTimePeriod</span>(<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-07-08<span class="pl-pds">'</span></span>), <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-07-11<span class="pl-pds">'</span></span>)),</span>
+<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">DateRange</span>(<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-07-08<span class="pl-pds">'</span></span>), <span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>(<span class="pl-s"><span class="pl-pds">'</span>2015-07-11<span class="pl-pds">'</span></span>)),</span>
 <span class="pl-s1">]);</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Optional business timezone</span></span>
@@ -129,4 +129,3 @@
   
   </body>
 </html>
-
