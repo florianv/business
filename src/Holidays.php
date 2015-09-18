@@ -67,9 +67,9 @@ final class Holidays implements \Serializable
      *
      * @param \DateTime $holiday
      */
-    private function addHoliday(\DateTime $holiday)
+    public function addHoliday(\DateTime $holiday)
     {
-        $this->holidays[$holiday->format('Y-m-d')] = $holiday;
+        $this->holidays->attach($holiday);
     }
 
     /**
@@ -77,7 +77,7 @@ final class Holidays implements \Serializable
      *
      * @param \DateTime[]|DateRange[]|DateRange $holidays
      */
-    private function addHolidays($holidays)
+    public function addHolidays($holidays)
     {
         foreach ($holidays as $holiday) {
             if ($holiday instanceof DateRange) {
@@ -86,7 +86,7 @@ final class Holidays implements \Serializable
                 continue;
             }
 
-            $this->holidays->attach($holiday);
+            $this->addHoliday($holiday);
         }
     }
 }
