@@ -27,6 +27,29 @@ class HolidaysTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($holidays->isHoliday(new \DateTime('2015-07-09 10:00')));
     }
 
+    public function testAddHoliday()
+    {
+        $holiday = new \DateTime('2015-05-11');
+
+        $holidays = new Holidays();
+        $holidays->addHoliday($holiday);
+
+        $this->assertTrue($holidays->isHoliday($holiday));
+    }
+
+    public function testAddHolidays()
+    {
+        $holiday = new \DateTime('2015-05-11');
+        $holidayRange = new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-21'));
+
+        $holidays = new Holidays();
+        $holidays->addHolidays([$holiday]);
+        $holidays->addHolidays($holidayRange);
+
+        $this->assertTrue($holidays->isHoliday($holiday));
+        $this->assertTrue($holidays->isHoliday(new \DateTime('2015-07-09 10:00')));
+    }
+
     public function testSerializeUnserialize()
     {
         $holidays = new Holidays([
