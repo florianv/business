@@ -67,5 +67,9 @@ class TimeTest extends \PHPUnit_Framework_TestCase
     {
         $time = new Time('20', '30');
         $this->assertEquals('20:30:00', $time->toString());
+        $time = new Time('9', '8', '7');
+        $this->assertEquals('09:08:07', $time->toString());
+        $time = new Time(9, 8, 7);
+        $this->assertEquals('09:08:07', $time->toString());
     }
 }
