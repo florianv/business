@@ -34,6 +34,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($business->within(new \DateTime('2015-05-11 18:00'))); // Monday
         $this->assertFalse($business->within(new \DateTime('2015-05-12 10:00'))); // Tuesday
+        $this->assertFalse($business->within(new \DateTime('2015-05-11 13:00:25'))); // Monday, seconds outside business hours
     }
 
     public function testWithinWithHoliday()
@@ -356,6 +357,26 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2015-05-29 10:00', $dates[1]->format('Y-m-d H:i'));
         $this->assertEquals('2015-06-01 09:00', $dates[2]->format('Y-m-d H:i'));
         $this->assertEquals('2015-06-05 10:00', $dates[3]->format('Y-m-d H:i'));
+    }
+
+    public function testTimelineWithSeconds()
+    {
+        $business = new Business([
+            new Day(Days::MONDAY, [['09:00', '17:00']]),
+            new Day(Days::TUESDAY, [['09:00', '17:00']]),
+            new Day(Days::WEDNESDAY, [['09:00', '17:00']]),
+        ]);
+
+        $start = new \DateTime('2015-05-25 11:00:25'); // Monday, with seconds
+        $end = new \DateTime('2015-05-27 13:00:40');
+
+        $dates = $business->timeline($start, $end, new \DateInterval('P1D'));
+
+        $this->assertCount(3, $dates);
+
+        $this->assertEquals('2015-05-25 11:00:25', $dates[0]->format('Y-m-d H:i:s'));
+        $this->assertEquals('2015-05-26 11:00:25', $dates[1]->format('Y-m-d H:i:s'));
+        $this->assertEquals('2015-05-27 11:00:25', $dates[2]->format('Y-m-d H:i:s'));
     }
 
     public function testTimelineWithDaysIntervalAndHolidays()

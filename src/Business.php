@@ -140,7 +140,7 @@ final class Business implements BusinessInterface, \Serializable
 
         if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
             if (null !== $closestTime = $day->getClosestOpeningTimeBefore($time, $tmpDate)) {
-                $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes());
+                $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes(), $closestTime->getSeconds());
 
                 return $tmpDate;
             }
@@ -154,7 +154,7 @@ final class Business implements BusinessInterface, \Serializable
 
         $closestDay = $this->getClosestDayBefore((int) $tmpDate->format('N'));
         $closingTime = $closestDay->getClosingTime($tmpDate);
-        $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes());
+        $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes(), $closingTime->getSeconds());
 
         return $tmpDate;
     }
@@ -196,7 +196,7 @@ final class Business implements BusinessInterface, \Serializable
 
         if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
             if (null !== $closestTime = $day->getClosestOpeningTimeAfter($time, $tmpDate)) {
-                $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes());
+                $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes(), $closestTime->getSeconds());
 
                 return $tmpDate;
             }
@@ -210,7 +210,7 @@ final class Business implements BusinessInterface, \Serializable
 
         $closestDay = $this->getClosestDayBefore((int) $tmpDate->format('N'));
         $closingTime = $closestDay->getOpeningTime($tmpDate);
-        $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes());
+        $tmpDate->setTime($closingTime->getHours(), $closingTime->getMinutes(), $closingTime->getSeconds());
 
         return $tmpDate;
     }
