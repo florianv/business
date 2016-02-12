@@ -20,17 +20,20 @@ final class Time
 {
     private $hours;
     private $minutes;
+    private $seconds;
 
     /**
      * Creates a new time.
      *
-     * @param string $hours
-     * @param string $minutes
+     * @param string|int $hours
+     * @param string|int $minutes
+     * @param string|int $seconds Optional seconds
      */
-    public function __construct($hours, $minutes)
+    public function __construct($hours, $minutes, $seconds = 0)
     {
-        $this->hours = $hours;
-        $this->minutes = $minutes;
+        $this->hours = (int) $hours;
+        $this->minutes = (int) $minutes;
+        $this->seconds = (int) $seconds;
     }
 
     /**
@@ -62,7 +65,7 @@ final class Time
      */
     public static function fromDate(\DateTime $date)
     {
-        return new self($date->format('H'), $date->format('i'));
+        return new self($date->format('H'), $date->format('i'), $date->format('s'));
     }
 
     /**
@@ -96,7 +99,7 @@ final class Time
      */
     public function getHours()
     {
-        return (int) $this->hours;
+        return $this->hours;
     }
 
     /**
@@ -106,7 +109,17 @@ final class Time
      */
     public function getMinutes()
     {
-        return (int) $this->minutes;
+        return $this->minutes;
+    }
+
+    /**
+     * Gets the seconds.
+     *
+     * @return int
+     */
+    public function getSeconds()
+    {
+        return $this->seconds;
     }
 
     /**
@@ -116,7 +129,7 @@ final class Time
      */
     public function toInteger()
     {
-        return (int) $this->hours.$this->minutes;
+        return (int) sprintf('%d%02d%02d', $this->hours, $this->minutes, $this->seconds);
     }
 
     /**
@@ -126,6 +139,6 @@ final class Time
      */
     public function toString()
     {
-        return sprintf('%s:%s', $this->hours, $this->minutes);
+        return sprintf('%02d:%02d:%02d', $this->hours, $this->minutes, $this->seconds);
     }
 }

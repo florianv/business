@@ -41,10 +41,10 @@ class TimeTest extends \PHPUnit_Framework_TestCase
     public function testToInteger()
     {
         $time = new Time('20', '00');
-        $this->assertEquals(2000, $time->toInteger());
+        $this->assertEquals(200000, $time->toInteger());
 
         $time = new Time('09', '30');
-        $this->assertEquals(930, $time->toInteger());
+        $this->assertEquals(93000, $time->toInteger());
     }
 
     public function testIsAfterOrEqual()
@@ -66,6 +66,10 @@ class TimeTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $time = new Time('20', '30');
-        $this->assertEquals('20:30', $time->toString());
+        $this->assertEquals('20:30:00', $time->toString());
+        $time = new Time('9', '8', '7');
+        $this->assertEquals('09:08:07', $time->toString());
+        $time = new Time(9, 8, 7);
+        $this->assertEquals('09:08:07', $time->toString());
     }
 }
