@@ -1,0 +1,12 @@
+{
+  "start": {
+    "hours": 8,
+    "minutes": 0,
+    "seconds": 1
+  },
+  "end": {
+    "hours": 18,
+    "minutes": 30,
+    "seconds": 2
+  }
+}

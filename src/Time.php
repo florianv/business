@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Time
+final class Time implements \JsonSerializable
 {
     private $hours;
     private $minutes;
@@ -140,5 +140,17 @@ final class Time
     public function toString()
     {
         return sprintf('%02d:%02d:%02d', $this->hours, $this->minutes, $this->seconds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'hours' => $this->hours,
+            'minutes' => $this->minutes,
+            'seconds' => $this->seconds,
+        ];
     }
 }

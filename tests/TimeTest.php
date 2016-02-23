@@ -72,4 +72,14 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         $time = new Time(9, 8, 7);
         $this->assertEquals('09:08:07', $time->toString());
     }
+
+    public function testJsonSerialize()
+    {
+        $time = new Time('20', '30', '15');
+
+        $this->assertJsonStringEqualsJsonFile(
+            __DIR__.'/Expected/Time/testJsonSerialize.json',
+            json_encode($time)
+        );
+    }
 }

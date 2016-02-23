@@ -13,8 +13,8 @@ namespace Business\Tests;
 
 use Business\Business;
 use Business\BusinessInterface;
-use Business\Days;
 use Business\Day;
+use Business\Days;
 use Business\Holidays;
 use Business\SpecialDay;
 
@@ -491,6 +491,31 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             TestUtil::getPropertyValue($business, 'timezone'),
             TestUtil::getPropertyValue($unserialized, 'timezone')
+        );
+    }
+
+    public function testJsonSerialize()
+    {
+        $holiday1 = new \DateTime('2015-05-11');
+        $holiday2 = new \DateTime('2015-05-12');
+
+        $business = new Business(
+            [
+                new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
+                new SpecialDay(
+                    Days::FRIDAY,
+                    function (\DateTime $date) {
+                        return [['10:00', '13:00'], ['14:00', '17:00']];
+                    }
+                ),
+            ],
+            new Holidays([$holiday1, $holiday2]),
+            new \DateTimeZone('Europe/London')
+        );
+
+        $this->assertJsonStringEqualsJsonFile(
+            __DIR__.'/Expected/Business/testJsonSerialize.json',
+            json_encode($business)
         );
     }
 

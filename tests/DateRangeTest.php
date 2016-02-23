@@ -19,7 +19,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
     {
         $dateRange = new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-13'));
 
-        $this->assertInstanceOf('DatePeriod', $dateRange->getIterator());
+        $this->assertInstanceOf('ArrayIterator', $dateRange->getIterator());
 
         $expected = [
             '2015-07-08',

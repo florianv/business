@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-final class DateTimeStorage extends \SplObjectStorage
+final class DateTimeStorage extends \SplObjectStorage implements \JsonSerializable
 {
     /**
      * {@inheritdoc}
@@ -24,5 +24,19 @@ final class DateTimeStorage extends \SplObjectStorage
     public function getHash($object)
     {
         return $object->format('Y-m-d');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $data = [];
+        /** @var \DateTime $dateTime */
+        foreach ($this as $dateTime) {
+            $data[] = $dateTime->format(\DateTime::ISO8601);
+        }
+
+        return $data;
     }
 }

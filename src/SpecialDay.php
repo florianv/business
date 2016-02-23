@@ -18,7 +18,7 @@ use SuperClosure\Serializer;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class SpecialDay extends AbstractDay implements \Serializable
+final class SpecialDay extends AbstractDay implements \Serializable, \JsonSerializable
 {
     private $openingIntervalsCache = [];
     private $openingIntervalsEvaluator;
@@ -129,6 +129,17 @@ final class SpecialDay extends AbstractDay implements \Serializable
         $data = unserialize($serialized);
         list($this->dayOfWeek, $this->openingIntervalsCache) = $data;
         $this->openingIntervalsEvaluator = $this->getSerializer()->unserialize($data[2]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'dayOfWeek' => $this->dayOfWeek,
+            'openingIntervals' => $this->openingIntervals,
+        ];
     }
 
     /**
