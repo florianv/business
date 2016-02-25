@@ -13,6 +13,7 @@ namespace Business\Tests;
 
 use Business\Business;
 use Business\BusinessInterface;
+use Business\DateRange;
 use Business\Day;
 use Business\Days;
 use Business\Holidays;
@@ -498,6 +499,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
     {
         $holiday1 = new \DateTime('2015-05-11');
         $holiday2 = new \DateTime('2015-05-12');
+        $holiday3 = new DateRange(new \DateTime('2016-02-25'), new \DateTime('2016-02-27'));
 
         $business = new Business(
             [
@@ -509,7 +511,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
                     }
                 ),
             ],
-            new Holidays([$holiday1, $holiday2]),
+            new Holidays([$holiday1, $holiday2, $holiday3]),
             new \DateTimeZone('Europe/London')
         );
 
