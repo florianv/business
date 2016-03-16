@@ -173,10 +173,6 @@ class SpecialDayTest extends \PHPUnit_Framework_TestCase
         $day = new SpecialDay(
             Days::MONDAY,
             function (\DateTime $date) {
-                if ('2015-05-25' == $date->format('Y-m-d')) {
-                    return [['14:00', '17:00'], ['06:00', '07:00']];
-                }
-
                 return [['12:00', '18:00']];
             }
         );
@@ -192,10 +188,6 @@ class SpecialDayTest extends \PHPUnit_Framework_TestCase
         $day = new SpecialDay(
             Days::MONDAY,
             function (\DateTime $date) {
-                if ('2015-05-25' == $date->format('Y-m-d')) {
-                    return [['14:00', '17:00'], ['06:00', '07:00']];
-                }
-
                 return [['12:00', '18:00']];
             }
         );

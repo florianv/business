@@ -82,6 +82,8 @@ $lastDate = $business->closest(new \DateTime('2015-05-11 10:00'), Business::CLOS
 
 ### Serialization
 
+#### PHP serialization
+
 The `Business` class can be serialized so it can be stored for later reuse:
 
 ```php
@@ -94,6 +96,17 @@ If you use `SpecialDay` instances, you need to install the `jeremeamia/superclos
 ```bash
 $ composer require jeremeamia/superclosure
 ```
+
+#### JSON serialization
+
+All classes can be encoded to JSON
+
+```php
+$json = json_encode($business);
+```
+
+The `SpecialDay` instances require a context in order extract the data from the callable.
+This is automatically set to `new \DateTime('now')` for `json_encode()` call only.
 
 ## License
 

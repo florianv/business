@@ -136,9 +136,12 @@ final class SpecialDay extends AbstractDay implements \Serializable, \JsonSerial
      */
     public function jsonSerialize()
     {
+        $day = clone $this;
+        $day->evaluateOpeningIntervals(new \DateTime('now'));
+
         return [
-            'dayOfWeek' => $this->dayOfWeek,
-            'openingIntervals' => $this->openingIntervals,
+            'dayOfWeek' => $day->getDayOfWeek(),
+            'openingIntervals' => $day->openingIntervals,
         ];
     }
 
@@ -147,7 +150,7 @@ final class SpecialDay extends AbstractDay implements \Serializable, \JsonSerial
      *
      * @return Serializer
      *
-     * @throws \RuntimeException If jeremeamia/superclosure is not isntalled
+     * @throws \RuntimeException If jeremeamia/superclosure is not installed
      */
     private function getSerializer()
     {

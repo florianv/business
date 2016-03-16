@@ -3,24 +3,12 @@
   "openingIntervals": [
     {
       "start": {
-        "hours": 6,
+        "hours": 12,
         "minutes": 0,
         "seconds": 0
       },
       "end": {
-        "hours": 7,
-        "minutes": 0,
-        "seconds": 0
-      }
-    },
-    {
-      "start": {
-        "hours": 14,
-        "minutes": 0,
-        "seconds": 0
-      },
-      "end": {
-        "hours": 17,
+        "hours": 18,
         "minutes": 0,
         "seconds": 0
       }

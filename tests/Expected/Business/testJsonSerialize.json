@@ -31,7 +31,32 @@
     },
     "5": {
       "dayOfWeek": 5,
-      "openingIntervals": []
+      "openingIntervals": [
+        {
+          "start": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "end": {
+            "hours": 13,
+            "minutes": 0,
+            "seconds": 0
+          }
+        },
+        {
+          "start": {
+            "hours": 14,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "end": {
+            "hours": 17,
+            "minutes": 0,
+            "seconds": 0
+          }
+        }
+      ]
     }
   },
   "holidays": [
