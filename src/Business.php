@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Business implements BusinessInterface, \Serializable
+final class Business implements BusinessInterface, \Serializable, \JsonSerializable
 {
     private $days;
     private $holidays;
@@ -123,6 +123,19 @@ final class Business implements BusinessInterface, \Serializable
         $data = unserialize($serialized);
         list($this->days, $this->holidays) = $data;
         $this->timezone = new \DateTimeZone($data[2]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return
+            [
+                'days' => $this->days,
+                'holidays' => $this->holidays,
+                'timezone' => $this->timezone->getName(),
+            ];
     }
 
     /**

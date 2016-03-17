@@ -1,0 +1,70 @@
+{
+  "days": {
+    "1": {
+      "dayOfWeek": 1,
+      "openingIntervals": [
+        {
+          "start": {
+            "hours": 9,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "end": {
+            "hours": 13,
+            "minutes": 0,
+            "seconds": 0
+          }
+        },
+        {
+          "start": {
+            "hours": 14,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "end": {
+            "hours": 17,
+            "minutes": 0,
+            "seconds": 0
+          }
+        }
+      ]
+    },
+    "5": {
+      "dayOfWeek": 5,
+      "openingIntervals": [
+        {
+          "start": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "end": {
+            "hours": 13,
+            "minutes": 0,
+            "seconds": 0
+          }
+        },
+        {
+          "start": {
+            "hours": 14,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "end": {
+            "hours": 17,
+            "minutes": 0,
+            "seconds": 0
+          }
+        }
+      ]
+    }
+  },
+  "holidays": [
+    "2015-05-11T00:00:00+0000",
+    "2015-05-12T00:00:00+0000",
+    "2016-02-25T00:00:00+0000",
+    "2016-02-26T00:00:00+0000",
+    "2016-02-27T00:00:00+0000"
+  ],
+  "timezone": "Europe/London"
+}

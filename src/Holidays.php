@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-final class Holidays implements \Serializable
+final class Holidays implements \Serializable, \JsonSerializable
 {
     private $holidays;
 
@@ -60,6 +60,20 @@ final class Holidays implements \Serializable
     public function unserialize($serialized)
     {
         $this->holidays = unserialize($serialized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $holidays = [];
+        /** @var \DateTime $holiday */
+        foreach ($this->holidays as $holiday) {
+            $holidays[] = $holiday->format(\DateTime::ISO8601);
+        }
+
+        return $holidays;
     }
 
     /**

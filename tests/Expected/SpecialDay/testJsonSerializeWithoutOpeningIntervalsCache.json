@@ -1,0 +1,17 @@
+{
+  "dayOfWeek": 1,
+  "openingIntervals": [
+    {
+      "start": {
+        "hours": 12,
+        "minutes": 0,
+        "seconds": 0
+      },
+      "end": {
+        "hours": 18,
+        "minutes": 0,
+        "seconds": 0
+      }
+    }
+  ]
+}

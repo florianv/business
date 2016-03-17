@@ -18,7 +18,7 @@ use SuperClosure\Serializer;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class SpecialDay extends AbstractDay implements \Serializable
+final class SpecialDay extends AbstractDay implements \Serializable, \JsonSerializable
 {
     private $openingIntervalsCache = [];
     private $openingIntervalsEvaluator;
@@ -132,11 +132,25 @@ final class SpecialDay extends AbstractDay implements \Serializable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $day = clone $this;
+        $day->evaluateOpeningIntervals(new \DateTime('now'));
+
+        return [
+            'dayOfWeek' => $day->getDayOfWeek(),
+            'openingIntervals' => $day->openingIntervals,
+        ];
+    }
+
+    /**
      * Gets a closure serializer object.
      *
      * @return Serializer
      *
-     * @throws \RuntimeException If jeremeamia/superclosure is not isntalled
+     * @throws \RuntimeException If jeremeamia/superclosure is not installed
      */
     private function getSerializer()
     {

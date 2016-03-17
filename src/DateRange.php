@@ -18,7 +18,7 @@ namespace Business;
  */
 final class DateRange implements \IteratorAggregate
 {
-    private $datePeriod;
+    private $datePeriod = array();
 
     /**
      * Creates a new DateTime period.
@@ -37,7 +37,13 @@ final class DateRange implements \IteratorAggregate
             throw new \LogicException('Start date must be earlier than end date.');
         }
 
-        $this->datePeriod = new \DatePeriod($startDate, new \DateInterval('P1D'), $endDate);
+        // Hack to make it work on HHVM.
+        $period = new \DatePeriod($startDate, new \DateInterval('P1D'), $endDate);
+        /** @var \DateTime $date */
+        foreach ($period as $date) {
+            $format = 'Y-m-d H:i:s';
+            $this->datePeriod[] = \DateTime::createFromFormat($format, $date->format($format), $date->getTimezone());
+        }
     }
 
     /**
@@ -45,6 +51,6 @@ final class DateRange implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return $this->datePeriod;
+        return new \ArrayIterator($this->datePeriod);
     }
 }

@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class TimeInterval
+final class TimeInterval implements \JsonSerializable
 {
     private $start;
     private $end;
@@ -88,5 +88,16 @@ final class TimeInterval
     public function getStart()
     {
         return $this->start;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'start' => $this->start,
+            'end' => $this->end,
+        ];
     }
 }

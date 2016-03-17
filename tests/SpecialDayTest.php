@@ -11,9 +11,9 @@
 
 namespace Business\Tests;
 
+use Business\Days;
 use Business\SpecialDay;
 use Business\Time;
-use Business\Days;
 
 class SpecialDayTest extends \PHPUnit_Framework_TestCase
 {
@@ -166,5 +166,38 @@ class SpecialDayTest extends \PHPUnit_Framework_TestCase
         // Instead of comparing closures we check the output is the same
         $this->assertTrue($day->isTimeWithinOpeningHours(new Time('14', '00'), $monday));
         $this->assertFalse($day->isTimeWithinOpeningHours(new Time('08', '00'), $monday));
+    }
+
+    public function testJsonSerializeWithoutOpeningIntervalsCache()
+    {
+        $day = new SpecialDay(
+            Days::MONDAY,
+            function (\DateTime $date) {
+                return [['12:00', '18:00']];
+            }
+        );
+
+        $this->assertJsonStringEqualsJsonFile(
+            __DIR__.'/Expected/SpecialDay/testJsonSerializeWithoutOpeningIntervalsCache.json',
+            json_encode($day)
+        );
+    }
+
+    public function testJsonSerializeWithOpeningIntervalsCache()
+    {
+        $day = new SpecialDay(
+            Days::MONDAY,
+            function (\DateTime $date) {
+                return [['12:00', '18:00']];
+            }
+        );
+
+        $monday = new \DateTime('2015-05-25');
+        $day->isTimeWithinOpeningHours(new Time('14', '00'), $monday);
+
+        $this->assertJsonStringEqualsJsonFile(
+            __DIR__.'/Expected/SpecialDay/testJsonSerializeWithOpeningIntervalsCache.json',
+            json_encode($day)
+        );
     }
 }

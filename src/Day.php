@@ -16,7 +16,7 @@ namespace Business;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Day extends AbstractDay implements \Serializable
+final class Day extends AbstractDay implements \Serializable, \JsonSerializable
 {
     /**
      * {@inheritdoc}
@@ -32,5 +32,17 @@ final class Day extends AbstractDay implements \Serializable
     public function unserialize($serialized)
     {
         list($this->dayOfWeek, $this->openingIntervals) = unserialize($serialized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return
+            [
+                'dayOfWeek' => $this->dayOfWeek,
+                'openingIntervals' => $this->openingIntervals,
+            ];
     }
 }

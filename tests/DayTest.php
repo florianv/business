@@ -12,8 +12,8 @@
 namespace Business\Tests;
 
 use Business\Day;
-use Business\Time;
 use Business\Days;
+use Business\Time;
 
 class DayTest extends \PHPUnit_Framework_TestCase
 {
@@ -135,6 +135,16 @@ class DayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             TestUtil::getPropertyValue($day, 'openingIntervals'),
             TestUtil::getPropertyValue($unserialized, 'openingIntervals')
+        );
+    }
+
+    public function testJsonSerialize()
+    {
+        $day = new Day(Days::MONDAY, [['12:00', '2 pm'], ['14:30', '18:30'], ['09:00', '10 AM']]);
+
+        $this->assertJsonStringEqualsJsonFile(
+            __DIR__.'/Expected/Day/testJsonSerialize.json',
+            json_encode($day)
         );
     }
 }
