@@ -57,7 +57,7 @@ interface BusinessInterface
      * The time will be set to the opening time of the next interval or day.
      *
      * - CLOSEST_LAST: Returns the closest business date before the given date (including it).
-     * The time will be set to the closing time of the last interval or day.
+     * The time will be set to the opening time of the last interval or day.
      */
     public function closest(\DateTime $date, $mode = self::CLOSEST_NEXT);
 }

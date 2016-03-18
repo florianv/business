@@ -46,16 +46,16 @@ class SpecialDayTest extends \PHPUnit_Framework_TestCase
                 return [['09:00', '14:00']];
             }
 
-            return [['09:00', '18:00']];
+            return [['10:00', '18:00']];
         });
 
         $mondayClosest = $day->getClosestOpeningTimeBefore(new Time('15', '00'), $monday);
         $tuesdayClosest = $day->getClosestOpeningTimeBefore(new Time('18', '01'), $tuesday);
 
-        $this->assertSame(14, $mondayClosest->getHours());
+        $this->assertSame(9, $mondayClosest->getHours());
         $this->assertSame(0, $mondayClosest->getMinutes());
 
-        $this->assertSame(18, $tuesdayClosest->getHours());
+        $this->assertSame(10, $tuesdayClosest->getHours());
         $this->assertSame(0, $tuesdayClosest->getMinutes());
     }
 

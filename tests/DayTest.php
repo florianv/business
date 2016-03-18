@@ -41,7 +41,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
         $closest = $day->getClosestOpeningTimeBefore(new Time('13', '00'), $context);
 
-        $this->assertSame(13, $closest->getHours());
+        $this->assertSame(12, $closest->getHours());
         $this->assertSame(0, $closest->getMinutes());
     }
 
@@ -51,7 +51,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
         $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
         $closest = $day->getClosestOpeningTimeBefore(new Time('14', '20'), $context);
 
-        $this->assertSame(14, $closest->getHours());
+        $this->assertSame(12, $closest->getHours());
         $this->assertSame(0, $closest->getMinutes());
     }
 
