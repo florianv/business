@@ -175,7 +175,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2015-05-25 10:00', new \DateTimeZone('Pacific/Tahiti'));
         $closest = $business->closest($date, Business::CLOSEST_LAST);
 
-        $this->assertEquals('2015-05-25 17:00', $closest->format('Y-m-d H:i'));
+        $this->assertEquals('2015-05-25 14:00', $closest->format('Y-m-d H:i'));
 
         date_default_timezone_set($tz);
     }

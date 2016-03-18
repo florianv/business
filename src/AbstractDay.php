@@ -51,7 +51,7 @@ abstract class AbstractDay implements DayInterface
     {
         foreach ($this->openingIntervals as $openingInterval) {
             if ($openingInterval->contains($time)) {
-                return $time;
+                return $openingInterval->getStart();
             }
         }
 
@@ -65,11 +65,11 @@ abstract class AbstractDay implements DayInterface
             }
 
             if (null === $closestTime) {
-                $closestTime = $interval->getEnd();
+                $closestTime = $interval->getStart();
             }
 
             if ($distance < $time->toInteger() - $closestTime->toInteger()) {
-                $closestTime = $interval->getEnd();
+                $closestTime = $interval->getStart();
             }
         }
 
