@@ -64,6 +64,26 @@ interface DayInterface
     public function getClosestOpeningTimeAfter(Time $time, \DateTime $context);
 
     /**
+     * Gets the closest opening interval endpoint time before the given time.
+     *
+     * @param Time      $time    The time
+     * @param \DateTime $context The date context
+     *
+     * @return Time|null
+     */
+    public function getClosestOpeningIntervalEndpointTimeBefore(Time $time, \DateTime $context);
+
+    /**
+     * Gets the closest opening interval time after the given time.
+     *
+     * @param Time      $time    The time
+     * @param \DateTime $context The date context
+     *
+     * @return Time|null
+     */
+    public function getClosestOpeningIntervalEndpointTimeAfter(Time $time, \DateTime $context);
+
+    /**
      * Checks if the given time is within opening hours of the day.
      *
      * @param Time      $time    The time

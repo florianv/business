@@ -323,6 +323,56 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $tuesdayCalls);
     }
 
+    public function testClosestIntervalEndpointBefore()
+    {
+        $business = new Business([
+            new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
+        ]);
+
+        // Withing working hours
+        $target = new \DateTime('2015-05-11 10:00'); // Monday
+        $date = $business->closestIntervalEndpoint($target, Business::CLOSEST_LAST);
+        $this->assertEquals('2015-05-11 09:00:00', $date->format('Y-m-d H:i:s')); // Monday
+
+        // The last day
+        $target = new \DateTime('2015-05-12 08:00'); // Tuesday
+        $date = $business->closestIntervalEndpoint($target, Business::CLOSEST_LAST);
+        $this->assertEquals('2015-05-11 17:00:00', $date->format('Y-m-d H:i:s')); // Monday
+
+        // Last week
+        $target = new \DateTime('2015-05-11 08:00'); // Monday
+        $date = $business->closestIntervalEndpoint($target, Business::CLOSEST_LAST);
+        $this->assertEquals('2015-05-08 17:00:00', $date->format('Y-m-d H:i:s')); // Last Friday
+    }
+
+    public function testClosestIntervalEndpointAfter()
+    {
+        $business = new Business([
+            new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
+            new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
+                return [['10:00', '13:00'], ['14:00', '17:00']];
+            }),
+        ]);
+
+        // Withing working hours
+        $target = new \DateTime('2015-05-11 10:00'); // Monday
+        $date = $business->closestIntervalEndpoint($target, Business::CLOSEST_NEXT);
+        $this->assertEquals('2015-05-11 13:00:00', $date->format('Y-m-d H:i:s')); // Monday
+
+        // The next day
+        $target = new \DateTime('2015-05-12 17:30'); // Tuesday
+        $date = $business->closestIntervalEndpoint($target, Business::CLOSEST_NEXT);
+        $this->assertEquals('2015-05-15 10:00:00', $date->format('Y-m-d H:i:s')); // Friday
+
+        // Next week
+        $target = new \DateTime('2015-05-15 17:30'); // Friday
+        $date = $business->closestIntervalEndpoint($target, Business::CLOSEST_NEXT);
+        $this->assertEquals('2015-05-18 09:00:00', $date->format('Y-m-d H:i:s')); // Next Monday
+    }
+
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage The start date must be before the end date.

@@ -62,6 +62,21 @@ final class Business implements BusinessInterface, \Serializable, \JsonSerializa
     /**
      * {@inheritdoc}
      */
+    public function closestIntervalEndpoint(\DateTime $date, $mode = self::CLOSEST_NEXT)
+    {
+        $tmpDate = clone $date;
+        $tmpDate->setTimezone($this->timezone);
+
+        if (self::CLOSEST_LAST === $mode) {
+            return $this->getClosestIntervalEndpointBefore($tmpDate);
+        }
+
+        return $this->getClosestIntervalEndpointAfter($tmpDate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function within(\DateTime $date)
     {
         $tmpDate = clone $date;
@@ -248,6 +263,54 @@ final class Business implements BusinessInterface, \Serializable, \JsonSerializa
         }
 
         return $tmpDate;
+    }
+
+    /**
+     * Gets the closest interval endpoint before the given date.
+     *
+     * @param \DateTime $date
+     *
+     * @return \DateTime
+     */
+    private function getClosestIntervalEndpointBefore(\DateTime $date)
+    {
+        $tmpDate = clone $date;
+        $dayOfWeek = (int) $tmpDate->format('N');
+        $time = Time::fromDate($tmpDate);
+
+        if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
+            if (null !== $closestTime = $day->getClosestOpeningIntervalEndpointTimeBefore($time, $tmpDate)) {
+                $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes(), $closestTime->getSeconds());
+
+                return $tmpDate;
+            }
+        }
+
+        return $this->getClosestDateBefore($date);
+    }
+
+    /**
+     * Gets the closest interval endpoint after the given date.
+     *
+     * @param \DateTime $date
+     *
+     * @return \DateTime
+     */
+    private function getClosestIntervalEndpointAfter(\DateTime $date)
+    {
+        $tmpDate = clone $date;
+        $dayOfWeek = (int) $tmpDate->format('N');
+        $time = Time::fromDate($tmpDate);
+
+        if (!$this->holidays->isHoliday($tmpDate) && null !== $day = $this->getDay($dayOfWeek)) {
+            if (null !== $closestTime = $day->getClosestOpeningIntervalEndpointTimeAfter($time, $tmpDate)) {
+                $tmpDate->setTime($closestTime->getHours(), $closestTime->getMinutes(), $closestTime->getSeconds());
+
+                return $tmpDate;
+            }
+        }
+
+        return $this->getClosestDateAfter($date);
     }
 
     /**

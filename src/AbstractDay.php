@@ -111,6 +111,34 @@ abstract class AbstractDay implements DayInterface
     /**
      * {@inheritdoc}
      */
+    public function getClosestOpeningIntervalEndpointTimeBefore(Time $time, \DateTime $context)
+    {
+        foreach ($this->openingIntervals as $openingInterval) {
+            if ($openingInterval->contains($time)) {
+                return $openingInterval->getStart();
+            }
+        }
+
+        return $this->getClosestOpeningTimeBefore($time, $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClosestOpeningIntervalEndpointTimeAfter(Time $time, \DateTime $context)
+    {
+        foreach ($this->openingIntervals as $openingInterval) {
+            if ($openingInterval->contains($time)) {
+                return $openingInterval->getEnd();
+            }
+        }
+
+        return $this->getClosestOpeningTimeAfter($time, $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isTimeWithinOpeningHours(Time $time, \DateTime $context)
     {
         foreach ($this->openingIntervals as $interval) {

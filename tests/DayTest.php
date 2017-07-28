@@ -93,6 +93,64 @@ class DayTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($closest);
     }
 
+    public function testGetClosestOpeningIntervalEndpointTimeInsideInterval()
+    {
+        $context = new \DateTime('2015-05-25');
+        $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
+        $closest = $day->getClosestOpeningIntervalEndpointTimeBefore(new Time('13', '00'), $context);
+
+        $this->assertSame(12, $closest->getHours());
+        $this->assertSame(0, $closest->getMinutes());
+    }
+
+    public function testGetClosestOpeningIntervalEndpointTimeBetweenIntervals()
+    {
+        $context = new \DateTime('2015-05-25');
+        $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
+        $closest = $day->getClosestOpeningIntervalEndpointTimeBefore(new Time('14', '20'), $context);
+
+        $this->assertSame(14, $closest->getHours());
+        $this->assertSame(0, $closest->getMinutes());
+    }
+
+    public function testGetClosestOpeningIntervalEndpointTimeOutsideIntervals()
+    {
+        $context = new \DateTime('2015-05-25');
+        $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
+        $closest = $day->getClosestOpeningIntervalEndpointTimeBefore(new Time('8', '0'), $context);
+
+        $this->assertNull($closest);
+    }
+
+    public function testGetClosestOpeningIntervalEndpointTimeAfterInsideInterval()
+    {
+        $context = new \DateTime('2015-05-25');
+        $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
+        $closest = $day->getClosestOpeningIntervalEndpointTimeAfter(new Time('13', '00'), $context);
+
+        $this->assertSame(14, $closest->getHours());
+        $this->assertSame(0, $closest->getMinutes());
+    }
+
+    public function testGetClosestOpeningIntervalEndpointTimeAfterBetweenIntervals()
+    {
+        $context = new \DateTime('2015-05-25');
+        $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
+        $closest = $day->getClosestOpeningIntervalEndpointTimeAfter(new Time('14', '20'), $context);
+
+        $this->assertSame(14, $closest->getHours());
+        $this->assertSame(30, $closest->getMinutes());
+    }
+
+    public function testGetClosestOpeningIntervalEndpointTimeAfterOutsideIntervals()
+    {
+        $context = new \DateTime('2015-05-25');
+        $day = new Day(Days::MONDAY, [['09:00', '10 AM'], ['12:00', '2 pm'], ['14:30', '18:30']]);
+        $closest = $day->getClosestOpeningIntervalEndpointTimeAfter(new Time('19', '00'), $context);
+
+        $this->assertNull($closest);
+    }
+
     public function testGetOpeningTime()
     {
         $context = new \DateTime('2015-05-25');

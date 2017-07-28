@@ -53,11 +53,29 @@ interface BusinessInterface
      *
      * The $mode works as follows:
      *
-     * - CLOSEST_AFTER: Returns the closest business date after the given date (including it).
+     * - CLOSEST_NEXT: Returns the closest business date after the given date (including it).
      * The time will be set to the opening time of the next interval or day.
      *
      * - CLOSEST_LAST: Returns the closest business date before the given date (including it).
      * The time will be set to the closing time of the last interval or day.
      */
     public function closest(\DateTime $date, $mode = self::CLOSEST_NEXT);
+
+    /**
+     * Returns the closest business opening hours interval endpoint for the given date.
+     *
+     * @param \DateTime $date The date
+     * @param int       $mode The mode CLOSEST_* constant
+     *
+     * @return \DateTime
+     *
+     * The $mode works as follows:
+     *
+     * - CLOSEST_NEXT: Returns the closest interval date and opening time after the given date.
+     * If the given date is inside the interval then the time will be set to closing time of that interval.
+     *
+     * - CLOSEST_LAST: Returns the closest interval date and closing time before the given date.
+     * If the given date is inside the interval then the time will be set to the opening time of that interval.
+     */
+    public function closestIntervalEndpoint(\DateTime $date, $mode = self::CLOSEST_NEXT);
 }
