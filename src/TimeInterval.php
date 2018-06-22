@@ -67,7 +67,7 @@ final class TimeInterval implements \JsonSerializable
      */
     public function contains(Time $time)
     {
-        return $this->start->isBeforeOrEqual($time) && $this->end->isAfterOrEqual($time);
+        return $this->start->isBeforeOrEqual($time) && $this->end->isAfter($time);
     }
 
     /**
