@@ -91,6 +91,18 @@ final class Time implements \JsonSerializable
     {
         return $this->toInteger() >= $other->toInteger();
     }
+    
+    /**
+     * Checks if this time is after or equal to an other time.
+     *
+     * @param Time $other
+     *
+     * @return bool
+     */
+    public function isAfter(Time $other)
+    {
+        return $this->toInteger() > $other->toInteger();
+    }
 
     /**
      * Gets the hours.
