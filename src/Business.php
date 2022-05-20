@@ -112,7 +112,7 @@ final class Business implements BusinessInterface, \Serializable, \JsonSerializa
      */
     public function serialize()
     {
-        return serialize([$this->days, $this->holidays, $this->timezone->getName()]);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -121,18 +121,28 @@ final class Business implements BusinessInterface, \Serializable, \JsonSerializa
     public function unserialize($serialized)
     {
         $data = unserialize($serialized);
-        list($this->days, $this->holidays) = $data;
+        $this->__unserialize($data);
+    }
+
+    public function __serialize(): array
+    {
+        return [$this->days, $this->holidays, $this->timezone->getName()];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        [$this->days, $this->holidays] = $data;
         $this->timezone = new \DateTimeZone($data[2]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return
             [
-                'days' => $this->days,
+                'days'     => $this->days,
                 'holidays' => $this->holidays,
                 'timezone' => $this->timezone->getName(),
             ];

@@ -14,24 +14,21 @@ namespace Business\Tests;
 use Business\Day;
 use Business\Days;
 use Business\Time;
+use PHPUnit\Framework\TestCase;
 
-class DayTest extends \PHPUnit_Framework_TestCase
+class DayTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid day of week "152".
-     */
     public function testExceptionInvalidDayOfWeek()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid day of week "152".');
         new Day(152, []);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The day must have at least one opening interval.
-     */
     public function testExceptionEmptyOpeningInterval()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The day must have at least one opening interval.');
         new Day(Days::MONDAY, []);
     }
 

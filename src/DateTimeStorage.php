@@ -21,7 +21,7 @@ final class DateTimeStorage extends \SplObjectStorage implements \JsonSerializab
     /**
      * {@inheritdoc}
      */
-    public function getHash($object)
+    public function getHash($object): string
     {
         return $object->format('Y-m-d');
     }
@@ -29,7 +29,7 @@ final class DateTimeStorage extends \SplObjectStorage implements \JsonSerializab
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = [];
         /** @var \DateTime $dateTime */

@@ -12,15 +12,14 @@
 namespace Business\Tests;
 
 use Business\Time;
+use PHPUnit\Framework\TestCase;
 
-class TimeTest extends \PHPUnit_Framework_TestCase
+class TimeTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid time "foo".
-     */
     public function testFromStringInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid time "foo".');
         Time::fromString('foo');
     }
 

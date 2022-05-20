@@ -11,6 +11,8 @@
 
 namespace Business;
 
+use Traversable;
+
 /**
  * Date range.
  *
@@ -18,7 +20,7 @@ namespace Business;
  */
 final class DateRange implements \IteratorAggregate
 {
-    private $datePeriod = array();
+    private $datePeriod = [];
 
     /**
      * Creates a new DateTime period.
@@ -49,7 +51,7 @@ final class DateRange implements \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->datePeriod);
     }

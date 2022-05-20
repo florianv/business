@@ -18,8 +18,9 @@ use Business\Day;
 use Business\Days;
 use Business\Holidays;
 use Business\SpecialDay;
+use PHPUnit\Framework\TestCase;
 
-class BusinessTest extends \PHPUnit_Framework_TestCase
+class BusinessTest extends TestCase
 {
     public function testWithin()
     {
@@ -27,7 +28,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
             new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
                 return [['10:00', '13:00'], ['14:00', '17:00']];
-            })
+            }),
         ]);
 
         $this->assertTrue($business->within(new \DateTime('2015-05-11 10:00'))); // Monday
@@ -91,7 +92,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
                 }
 
                 return [['09:00', '13:00'], ['14:00', '17:00']];
-            })
+            }),
         ]);
 
         $business->within($mondayOne);
@@ -201,7 +202,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
                 }
 
                 return [['09:00', '13:00'], ['14:00', '17:00']];
-            })
+            }),
         ]);
 
         $business->closest($mondayOne, BusinessInterface::CLOSEST_LAST);
@@ -311,7 +312,7 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
                 }
 
                 return [['09:00', '13:00'], ['14:00', '17:00']];
-            })
+            }),
         ]);
 
         $business->closest($mondayOne);
@@ -323,12 +324,10 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $tuesdayCalls);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The start date must be before the end date.
-     */
     public function testTimelineExceptionWhenStartAfterEnd()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The start date must be before the end date.');
         $business = new Business([new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']])]);
         $start = new \DateTime('2015-05-25 11:00');
         $end = new \DateTime('2015-05-25 10:00');
@@ -455,12 +454,10 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         date_default_timezone_set($tz);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage At least one day must be added.
-     */
     public function testExceptionEmptyDays()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('At least one day must be added.');
         new Business([]);
     }
 
@@ -535,17 +532,17 @@ class BusinessTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($business->within($holiday));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The holidays parameter must be an array of \DateTime objects, an instance of Business\Holidays or null.
-     */
     public function testBackwardsCompatibleException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The holidays parameter must be an array of \DateTime objects, an instance of Business\Holidays or null.'
+        );
         $business = new Business([
             new Day(Days::MONDAY, [['09:00', '13:00'], ['14:00', '17:00']]),
             new SpecialDay(Days::FRIDAY, function (\DateTime $date) {
                 return [['10:00', '13:00'], ['14:00', '17:00']];
             }),
-        ], new \stdClass);
+        ], new \stdClass());
     }
 }

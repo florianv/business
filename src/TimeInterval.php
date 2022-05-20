@@ -49,9 +49,9 @@ final class TimeInterval implements \JsonSerializable
      * @param string $startTime The start time
      * @param string $endTime   The end time
      *
-     * @return TimeInterval
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return TimeInterval
      */
     public static function fromString($startTime, $endTime)
     {
@@ -93,11 +93,11 @@ final class TimeInterval implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'start' => $this->start,
-            'end' => $this->end,
+            'end'   => $this->end,
         ];
     }
 }
