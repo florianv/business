@@ -23,7 +23,7 @@ final class Day extends AbstractDay implements \Serializable, \JsonSerializable
      */
     public function serialize()
     {
-        return serialize([$this->dayOfWeek, $this->openingIntervals]);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -31,17 +31,28 @@ final class Day extends AbstractDay implements \Serializable, \JsonSerializable
      */
     public function unserialize($serialized)
     {
-        list($this->dayOfWeek, $this->openingIntervals) = unserialize($serialized);
+        $data = unserialize($serialized);
+        $this->__unserialize($data);
+    }
+
+    public function __serialize(): array
+    {
+        return [$this->dayOfWeek, $this->openingIntervals];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        [$this->dayOfWeek, $this->openingIntervals] = $data;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return
             [
-                'dayOfWeek' => $this->dayOfWeek,
+                'dayOfWeek'        => $this->dayOfWeek,
                 'openingIntervals' => $this->openingIntervals,
             ];
     }

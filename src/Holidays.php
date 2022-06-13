@@ -51,7 +51,7 @@ final class Holidays implements \Serializable, \JsonSerializable
      */
     public function serialize()
     {
-        return serialize($this->holidays);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -59,13 +59,24 @@ final class Holidays implements \Serializable, \JsonSerializable
      */
     public function unserialize($serialized)
     {
-        $this->holidays = unserialize($serialized);
+        $data = unserialize($serialized);
+        $this->__unserialize($data);
+    }
+
+    public function __serialize(): array
+    {
+        return [$this->holidays];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        list($this->holidays) = $data;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $holidays = [];
         /** @var \DateTime $holiday */

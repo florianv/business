@@ -41,9 +41,9 @@ final class Time implements \JsonSerializable
      *
      * @param string $time
      *
-     * @return Time
-     *
      * @throws \InvalidArgumentException If the passed time is invalid
+     *
+     * @return Time
      */
     public static function fromString($time)
     {
@@ -125,7 +125,7 @@ final class Time implements \JsonSerializable
     /**
      * Returns an integer representation of the time.
      *
-     * @return integer
+     * @return int
      */
     public function toInteger()
     {
@@ -145,10 +145,10 @@ final class Time implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
-            'hours' => $this->hours,
+            'hours'   => $this->hours,
             'minutes' => $this->minutes,
             'seconds' => $this->seconds,
         ];

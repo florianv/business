@@ -14,24 +14,21 @@ namespace Business\Tests;
 use Business\Days;
 use Business\SpecialDay;
 use Business\Time;
+use PHPUnit\Framework\TestCase;
 
-class SpecialDayTest extends \PHPUnit_Framework_TestCase
+class SpecialDayTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid day of week "152".
-     */
     public function testExceptionInvalidDayOfWeek()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid day of week "152".');
         new SpecialDay(152, function () {});
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The special day evaluator must return an array of opening intervals.
-     */
     public function testCallableNotReturningProperIntervals()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('The special day evaluator must return an array of opening intervals.');
         $day = new SpecialDay(Days::MONDAY, function (\DateTime $date) {});
         $day->getClosestOpeningTimeBefore(new Time('15', '00'), new \DateTime());
     }

@@ -12,8 +12,9 @@
 namespace Business\Tests;
 
 use Business\DateTimeStorage;
+use PHPUnit\Framework\TestCase;
 
-class DateTimeStorageTest extends \PHPUnit_Framework_TestCase
+class DateTimeStorageTest extends TestCase
 {
     public function testHash()
     {

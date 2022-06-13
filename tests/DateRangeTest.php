@@ -12,8 +12,9 @@
 namespace Business\Tests;
 
 use Business\DateRange;
+use PHPUnit\Framework\TestCase;
 
-class DateRangeTest extends \PHPUnit_Framework_TestCase
+class DateRangeTest extends TestCase
 {
     public function testIterator()
     {
@@ -38,12 +39,10 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Start date must be earlier than end date.
-     */
     public function testStartDateIsEarlier()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Start date must be earlier than end date.');
         new DateRange(new \DateTime('2015-07-08'), new \DateTime('2015-07-07'));
     }
 }

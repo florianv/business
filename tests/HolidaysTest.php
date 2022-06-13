@@ -13,8 +13,9 @@ namespace Business\Tests;
 
 use Business\DateRange;
 use Business\Holidays;
+use PHPUnit\Framework\TestCase;
 
-class HolidaysTest extends \PHPUnit_Framework_TestCase
+class HolidaysTest extends TestCase
 {
     public function testIsHoliday()
     {
