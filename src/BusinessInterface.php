@@ -37,9 +37,9 @@ interface BusinessInterface
      * @param \DateTime     $end      The end date
      * @param \DateInterval $interval The interval between two dates
      *
-     * @return \DateTime[]
-     *
      * @throws \LogicException If the start date is not earlier than end date
+     *
+     * @return \DateTime[]
      */
     public function timeline(\DateTime $start, \DateTime $end, \DateInterval $interval);
 

@@ -27,8 +27,8 @@ abstract class AbstractDay implements DayInterface
     /**
      * Constructor.
      *
-     * @param integer $dayOfWeek        The day of week
-     * @param array   $openingIntervals The opening intervals
+     * @param int   $dayOfWeek        The day of week
+     * @param array $openingIntervals The opening intervals
      */
     public function __construct($dayOfWeek, array $openingIntervals)
     {
