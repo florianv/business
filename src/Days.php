@@ -27,13 +27,13 @@ final class Days
     const SUNDAY = 7;
 
     private static $strings = [
-        self::MONDAY => 'Monday',
-        self::TUESDAY => 'Tuesday',
+        self::MONDAY    => 'Monday',
+        self::TUESDAY   => 'Tuesday',
         self::WEDNESDAY => 'Wednesday',
-        self::THURSDAY => 'Thursday',
-        self::FRIDAY => 'Friday',
-        self::SATURDAY => 'Saturday',
-        self::SUNDAY => 'Sunday'
+        self::THURSDAY  => 'Thursday',
+        self::FRIDAY    => 'Friday',
+        self::SATURDAY  => 'Saturday',
+        self::SUNDAY    => 'Sunday',
     ];
 
     /**
